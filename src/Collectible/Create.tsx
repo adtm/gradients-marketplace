@@ -52,6 +52,7 @@ const readURL = (file: any) => {
       reader.readAsDataURL(file);
   });
 };
+
 const Upload = ({setImage}: any) => (
   <div>
     <label htmlFor="upload" className="block text-sm font-medium text-gray-700">
