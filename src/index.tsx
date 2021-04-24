@@ -1,12 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Router from './Router';
+import { Web3ReactProvider } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
+
+// @ts-ignore
+function getLibrary(provider) {
+  const library = new Web3Provider(provider);
+  library.pollingInterval = 8000;
+  return library;
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Web3ReactProvider getLibrary={getLibrary}>
+
+    <Router />
+    </Web3ReactProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
