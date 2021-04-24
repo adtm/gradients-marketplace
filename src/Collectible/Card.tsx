@@ -5,9 +5,8 @@ import { Link } from 'react-router-dom'
 
 const Card = ({ collectible }) => {
     return (
-      <Link to={`/collectible/${collectible.id}`}>
         <div className="sm:w-56 m-3" >
-          <img className="rounded-md rounded-b-none" src={collectible.image} />
+          <img className="rounded-md rounded-b-none w-56 h-56 bg-gray-300" src={collectible.image || 'https://99designs-blog.imgix.net/blog/wp-content/uploads/2018/12/Gradient_builder_2.jpg?auto=format&q=60&w=1815&h=1020.9375&fit=crop&crop=faces'} />
           <div className="shadow-xl rounded-t-none rounded-md">
             <div className="px-4 py-4">
               <span className="text-xs text-gray-500 font-bold">{collectible.quantity.number} of {collectible.quantity.from}</span>
@@ -24,7 +23,7 @@ const Card = ({ collectible }) => {
             </button>
           </div>
         </div>
-      </Link>
+
   
     )
   }

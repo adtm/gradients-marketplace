@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter,
   Switch,
@@ -11,9 +11,7 @@ import Home from "./Home/Home";
 import Create from "./Collectible/Create";
 
 const Router = () => { 
-
   return (
-
     <BrowserRouter>
       <Navigation />
       <div className="md:mx-10 md:my-10 sm:mx-10 sm:my-10 my-5 mx-5">

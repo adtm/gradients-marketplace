@@ -6,13 +6,14 @@ import accounts from '../data/accounts';
 const Create = () => {
   const [price, setPrice] = useState<number>(1.00)
   const [quantity, setQuantity] = useState<number>(1)
-  const [name, setName] = useState<string>("uniQue")
+  const [name, setName] = useState<string>("art-name")
+  const [image, setImage] = useState<string>("")
 
   return (
     <div className="flex justify-center items-center sm:space-x-10 container w-full lg:w-2/3 m-auto flex-wrap sm:flex-nowrap">
       <div className="space-y-5 w-full lg:w-1/2">
         <h1 className="text-3xl mb-10 font-semibold">Create a collectible</h1>
-        <Upload />
+        <Upload setImage={setImage} />
         <Name name={name} setName={setName} />
         <Description />
         <Quantity quantity={quantity} setQuantity={setQuantity} />
@@ -25,6 +26,7 @@ const Create = () => {
         <Card collectible={{
 
           ...collectibles[1],
+          image,
           name,
           price: {
             one: price
@@ -42,18 +44,25 @@ const Create = () => {
 }
 
 export default Create;
-
-const Upload = () => (
+const readURL = (file: any) => {
+  return new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = (e:any) => res(e.target.result);
+      reader.onerror = e => rej(e);
+      reader.readAsDataURL(file);
+  });
+};
+const Upload = ({setImage}: any) => (
   <div>
-    <label htmlFor="c" className="block text-sm font-medium text-gray-700">
+    <label htmlFor="upload" className="block text-sm font-medium text-gray-700">
       Upload
   </label>
-    <div className="mt-1  ">
+    <div className="mt-1">
       <label className=" flex flex-col items-center px-4 py-6 bg-white shadow-sm rounded-md  tracking-wide  border  border-gray-300 border-dashed cursor-pointer ">
 
         <span className="sm:text-sm text-gray-500">Choose file</span>
         <span className="text-xs text-gray-300">jpg, png, gif</span>
-        <input type='file' className="hidden" />
+        <input type='file' className="hidden" onChange={async (event: any) => setImage(await readURL(event.target.files[0]))} />
       </label>
     </div>
   </div>
