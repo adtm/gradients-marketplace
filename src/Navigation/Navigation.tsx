@@ -4,19 +4,9 @@ import { Link } from 'react-router-dom'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { useEthereumProvider } from '../hooks/ethereum'
-import accounts from '../data/accounts'
-
-
-const MAIN_CHAIN_ID = "1666700000"
-const TESTNET_CHAIN_ID = "1666600000"
-
-const HARMONY_CHAIN_IDS = new Set([TESTNET_CHAIN_ID, MAIN_CHAIN_ID])
-
-
-
 
 const NetworkButton = () => {
-  const { error, account, ethereum } = useEthereumProvider(HARMONY_CHAIN_IDS)
+  const { error, account, ethereum } = useEthereumProvider()
 
   const buttonText = () => {
     if (error) return error

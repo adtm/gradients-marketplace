@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react'
 import detectEthereumProvider from '@metamask/detect-provider';
 
-const useEthereumProvider = (supportedChainIds: Set<string>) => {
+const MAIN_CHAIN_ID = "1666700000"
+const TESTNET_CHAIN_ID = "1666600000"
 
+const HARMONY_CHAIN_IDS = new Set([TESTNET_CHAIN_ID, MAIN_CHAIN_ID])
+
+const useEthereumProvider = () => {
   const { ethereum } = window as any;
 
   const [error, setError] = useState<string | null>(null);
@@ -11,7 +15,6 @@ const useEthereumProvider = (supportedChainIds: Set<string>) => {
   useEffect(() => {
     _connect();
   }, [])
-
 
   const _connect = async () => {
     const provider = await detectEthereumProvider();
@@ -39,7 +42,7 @@ const useEthereumProvider = (supportedChainIds: Set<string>) => {
 
   const _handleChainIdChanged = (chainId: string) => {
     const chainIdInDec = BigInt(chainId).toString(10)
-    if (!supportedChainIds.has(chainIdInDec)) {
+    if (!HARMONY_CHAIN_IDS.has(chainIdInDec)) {
       setError("Wrong network")
     } else {
       setError(null);
