@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.0;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
  
-
 contract GradientToken is ERC721, Ownable {
 
   struct Gradient {
@@ -20,10 +19,7 @@ contract GradientToken is ERC721, Ownable {
 
   constructor() ERC721("Ichi", "ICHI") {}
 
-  function createGradient(
-    string memory left, 
-    string memory right
-  ) public onlyOwner returns (uint256){
+  function createGradient(string memory left, string memory right) public onlyOwner returns (uint256) {
     tokenIds.increment();
     uint256 tokenId = tokenIds.current();
 
