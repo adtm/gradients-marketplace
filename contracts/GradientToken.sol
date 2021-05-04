@@ -30,11 +30,17 @@ contract GradientToken is ERC721, Ownable {
     _mint(msg.sender, tokenId);
     Gradient memory gradient = Gradient(left, right);
     gradientByTokenId[tokenId] = gradient;
+
+    emit CreatedGradient(tokenId);
     return tokenId;
   }
 
-  function getGradient(uint256 tokenId) public view returns (Gradient memory) {
-    return gradientByTokenId[tokenId];
+  function getGradient(uint256 tokenId) public view returns (string memory left, string memory right) {
+    Gradient memory gradient = gradientByTokenId[tokenId];
+
+    return (gradient.left, gradient.right);
   }
+
+  event CreatedGradient(uint256 tokenId);
 }
  
