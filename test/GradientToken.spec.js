@@ -32,7 +32,7 @@ contract("Gradient token", accounts => {
 
     await expectRevert(
       instance.createGradient("#ff00dd", "#ddddff", {
-        from: "0xf6a948bff792e4f42d7f17e5e4ebe20871d160f2"
+        from: accounts[1]
       }),
       "caller is not the owner"
     )

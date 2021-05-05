@@ -7,64 +7,57 @@ import "./GradientDomain.sol";
 
 contract GradientMarketplace is GradientDomain {
 
-  struct GradientTransaction {
+  struct SellTransaction {
     uint256 tokenId;
-    bool isSellable;
     address payable owner;
+    bool forSale;
     uint256 price;
   }
 
-  address beneficiary;
 
-  GradientToken gradientToken;
-  mapping (uint256 => address) gradientOwnerByTokenId;
-  mapping (uint256 => GradientTransaction) gradientTransactionByTokenId;
-  
+  GradientToken public gradientToken;
+  mapping (uint256 => SellTransaction) public sellTransactionByTokenId;
 
-  constructor(address tokenAddress, address beneficiaryAddress) {
-    gradientToken = GradientToken(tokenAddress);
-    beneficiary = beneficiaryAddress;
+  constructor(address tokenAddress) {
+    gradientToken = GradientToken(tokenAddress); 
   }
 
-  function sellGradient(uint256 tokenId, uint256 price) public returns (bool) {
-    address ownerAddress = gradientOwnerByTokenId[tokenId];
-    require(msg.sender != ownerAddress, "Gradient doesn't belong to you");
-    require(price != 0, "Sell price cannot be 0");
+  modifier onlyGradientOwner(uint256 tokenId) {
+    address ownerAddress = gradientToken.ownerOf(tokenId);
+    require(msg.sender == ownerAddress, "Gradient doesn't belong to you");
+    _;
+  }
 
-    GradientTransaction memory gradientTransaction;
-    gradientTransaction.tokenId = tokenId;
-    gradientTransaction.isSellable = true;
-    gradientTransaction.owner = payable(msg.sender);
-    gradientTransaction.price = price;
+  function sellGradient(uint256 tokenId, uint256 price) public onlyGradientOwner(tokenId) returns (bool) {
+    require(price > 0, "Sell price cannot be negative or zero");
+
+    SellTransaction memory transaction;
+    transaction.tokenId = tokenId;
+    transaction.owner = payable(msg.sender);
+    transaction.forSale = true;
+    transaction.price = price;
     
-    gradientTransactionByTokenId[tokenId] = gradientTransaction;
+    sellTransactionByTokenId[tokenId] = transaction;
     return true;
   }
 
   function buyGradient(uint256 tokenId) external payable returns (bool) {
-    GradientTransaction memory gradient = gradientTransactionByTokenId[tokenId];
-    require(gradient.isSellable == true);
-    require(msg.value >= gradient.price, "Gradient price is higher than sent amount");
+    SellTransaction memory transaction = sellTransactionByTokenId[tokenId];
+    require(msg.value >= transaction.price, "Gradient price is higher than sent amount");
+    require(transaction.forSale == true, "Gradient is not for sale");
 
-    address payable payableOwner = payable(gradientOwnerByTokenId[tokenId]);
-    uint256 payableAmount = msg.value - gradient.price;
+    uint256 payableAmount = msg.value - transaction.price;
 
-    if (!payableOwner.send(payableAmount)) {
+    if (!transaction.owner.send(payableAmount)) {
       revert();
     }
 
-    gradientToken.safeTransferFrom(payableOwner, msg.sender, tokenId);
+    gradientToken.safeTransferFrom(transaction.owner, msg.sender, tokenId);
     return true;
   }
 
-  function cancelGradientSale(uint256 tokenId) public returns (bool) {
-    address ownerAddress = gradientOwnerByTokenId[tokenId];
-    require(msg.sender != ownerAddress, "Gradient doesnt belong to you");
-
-    GradientTransaction memory gradientTransaction = gradientTransactionByTokenId[tokenId];
-    gradientTransaction.isSellable = false;
-    
-    gradientTransactionByTokenId[tokenId] = gradientTransaction;
+  function cancelSellGradient(uint256 tokenId) public onlyGradientOwner(tokenId) returns (bool) {
+    delete sellTransactionByTokenId[tokenId];
     return true;
   }
 

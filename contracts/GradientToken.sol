@@ -1,16 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
- 
-contract GradientToken is ERC721, Ownable {
+import "./GradientDomain.sol";
 
-  struct Gradient {
-    string left;
-    string right;
-  }
+contract GradientToken is ERC721, Ownable, GradientDomain {
 
   using Counters for Counters.Counter;
   Counters.Counter private tokenIds;
