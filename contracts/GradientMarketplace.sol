@@ -43,8 +43,9 @@ contract GradientMarketplace is GradientDomain {
 
   function buyGradient(uint256 tokenId) external payable returns (bool) {
     SellTransaction memory transaction = sellTransactionByTokenId[tokenId];
-    require(msg.value >= transaction.price, "Gradient price is higher than sent amount");
     require(transaction.forSale == true, "Gradient is not for sale");
+    require(transaction.owner != msg.sender, "Gradient can't be bought by owner");
+    require(msg.value >= transaction.price, "Gradient price is higher than sent amount");
 
     uint256 payableAmount = msg.value - transaction.price;
 

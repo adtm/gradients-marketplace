@@ -6,6 +6,7 @@ const {
 } = require('@openzeppelin/test-helpers');
 const faker = require("faker");
 
+// @NOTE: make a test and fix duplicate gradient minting
 contract("Gradient token", accounts => {
 
   let leftColor;

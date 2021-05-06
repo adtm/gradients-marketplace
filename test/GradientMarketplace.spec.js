@@ -5,13 +5,10 @@ const {
   expectEvent,
   expectRevert
 } = require('@openzeppelin/test-helpers');
-<<<<<<< Updated upstream
-=======
-const faker = require("faker");
 
 // @NOTE: cleanups
 // @NOTE: random values
->>>>>>> Stashed changes
+const faker = require("faker")
 
 contract("Gradient marketplace", accounts => {
 
@@ -20,10 +17,16 @@ contract("Gradient marketplace", accounts => {
 
   const tokenId = new BN(1);
   const price = new BN(20);
+  
+  let leftColor;
+  let rightColor;
 
   beforeEach(async () => {
     tokenInstance = await GradientToken.deployed();
     markeplaceInstance = await GradientMarketplace.deployed(tokenInstance.address);
+
+    leftColor = faker.commerce.color();
+    rightColor = faker.commerce.color();
   })
 
   it("should receive nft address on constructor", async () => {
@@ -35,7 +38,7 @@ contract("Gradient marketplace", accounts => {
   describe("sellGradient", () => {
 
     it("should put a gradient for sale by owner", async () => {
-      await tokenInstance.createGradient("A", "A", { from: accounts[0] });
+      await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] });
       await markeplaceInstance.sellGradient(tokenId, price, {
         from: accounts[0]
       });
@@ -48,10 +51,10 @@ contract("Gradient marketplace", accounts => {
     })
 
     it("shouldn't allow to sell gradient to not an owner", async () => {
-      await tokenInstance.createGradient("A", "A", { from: accounts[0] });
+      await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] });
 
       await expectRevert(
-        markeplaceInstance.sellGradient(new BN(1), new BN(20), {
+        markeplaceInstance.sellGradient(new BN(2), new BN(20), {
           from: accounts[1]
         }),
         "Gradient doesn't belong to you"
@@ -59,10 +62,10 @@ contract("Gradient marketplace", accounts => {
     });
 
     it("shouldn't allow to sell gradient for 0 price", async () => {
-      await tokenInstance.createGradient("A", "A", { from: accounts[0] });
+      await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] });
 
       await expectRevert(
-        markeplaceInstance.sellGradient(new BN(1), new BN(0), {
+        markeplaceInstance.sellGradient(new BN(3), new BN(0), {
           from: accounts[0]
         }),
         "Sell price cannot be negative or zero"
@@ -73,16 +76,16 @@ contract("Gradient marketplace", accounts => {
   describe("cancelSellGradient", () => {
 
     it("shouldn't allow to cancel a gradient sale to not an owner", async () => {
-      await tokenInstance.createGradient("A", "A", { from: accounts[0] });
-      await markeplaceInstance.sellGradient(tokenId, price, {
+      await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] });
+      await markeplaceInstance.sellGradient(new BN(4), price, {
         from: accounts[0]
       });
 
-      await  markeplaceInstance.cancelSellGradient(new BN(1), {
+      await markeplaceInstance.cancelSellGradient(new BN(4), {
         from: accounts[0]
       });
 
-      const result = await markeplaceInstance.sellTransactionByTokenId.call(1);
+      const result = await markeplaceInstance.sellTransactionByTokenId.call(4);
       assert.deepEqual(result[0].toString(), '0');
       assert.deepEqual(result[1].toString(), '0x0000000000000000000000000000000000000000');
       assert.deepEqual(result[2], false);
@@ -90,13 +93,13 @@ contract("Gradient marketplace", accounts => {
     });
 
     it("shouldn't allow to cancel a gradient sale to not an owner", async () => {
-      await tokenInstance.createGradient("A", "A", { from: accounts[0] });
-      await markeplaceInstance.sellGradient(tokenId, price, {
+      await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] });
+      await markeplaceInstance.sellGradient(new BN(5), price, {
         from: accounts[0]
       });
 
       await expectRevert(
-        markeplaceInstance.cancelSellGradient(new BN(1), {
+        markeplaceInstance.cancelSellGradient(new BN(5), {
           from: accounts[1]
         }),
         "Gradient doesn't belong to you"
