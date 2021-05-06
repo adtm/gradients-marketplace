@@ -5,6 +5,7 @@ const {
   expectRevert
 } = require('@openzeppelin/test-helpers');
 
+// @NOTE: make a test and fix duplicate gradient minting
 contract("Gradient token", accounts => {
 
   it("should make deployer as the owner of the token", async () => {
