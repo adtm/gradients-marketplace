@@ -53,6 +53,7 @@ contract GradientMarketplace is GradientDomain {
     }
 
     gradientToken.safeTransferFrom(transaction.owner, msg.sender, tokenId);
+    delete sellTransactionByTokenId[tokenId];
     return true;
   }
 

@@ -5,6 +5,13 @@ const {
   expectEvent,
   expectRevert
 } = require('@openzeppelin/test-helpers');
+<<<<<<< Updated upstream
+=======
+const faker = require("faker");
+
+// @NOTE: cleanups
+// @NOTE: random values
+>>>>>>> Stashed changes
 
 contract("Gradient marketplace", accounts => {
 
@@ -96,5 +103,65 @@ contract("Gradient marketplace", accounts => {
       );
     });
   });
-  
+
+  describe("buyGradient", () => {
+
+    it("shouldn't allow to buy a gradient, which is not for sale", async () => {
+      await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] });
+
+      await expectRevert(
+        markeplaceInstance.buyGradient(new BN(6), {
+          from: accounts[1]
+        }),
+        "Gradient is not for sale"
+      );  
+    });
+
+    it("shouldn't allow to buy an own gradient for the owner", async () => {
+      await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] });
+      await markeplaceInstance.sellGradient(new BN(7), price, {
+        from: accounts[0]
+      });
+
+      await expectRevert(
+        markeplaceInstance.buyGradient(new BN(7), {
+          from: accounts[0]
+        }),
+        "Gradient can't be bought by owner"
+      );  
+    });
+
+    it("should fail if sent transaction value is lower than gradient price", async () => {
+      await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] });
+      await markeplaceInstance.sellGradient(new BN(8), price, {
+        from: accounts[0]
+      });
+
+      await expectRevert(
+        markeplaceInstance.buyGradient(new BN(8), {
+          from: accounts[1],
+          value: 1
+        }),
+        "Gradient price is higher than sent amount"
+      );  
+    });
+
+    it("should buy a gradient when the seller approves it", async() => {
+      await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] });
+      await markeplaceInstance.sellGradient(new BN(9), price, {
+        from: accounts[0]
+      });
+      const tokenOwner = await tokenInstance.ownerOf(new BN(9));
+      assert.deepEqual(tokenOwner, accounts[0]);
+
+      await tokenInstance.approve(markeplaceInstance.address, new BN(9), { from: accounts[0] });
+      await markeplaceInstance.buyGradient(new BN(9), {
+        from: accounts[1],
+        value: 200
+      });
+      
+      const transferredOwner = await tokenInstance.ownerOf(new BN(9));
+      assert.deepEqual(transferredOwner, accounts[1]);
+    });
+  });
 });
