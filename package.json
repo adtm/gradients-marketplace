@@ -44,6 +44,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "truffle test",
+    "truffle:compile": "truffle compile",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

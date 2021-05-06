@@ -24,3 +24,8 @@ Epic -> List owned NFT's
 
 <!-- Epic -> Artist Screen -->
 Epic -> NFT Screen
+
+```
+  npx truffle compile
+  npx truffle migrate
+```

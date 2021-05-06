@@ -8,7 +8,7 @@ module.exports = {
     local: {
       network_id: "*",
       host: "127.0.0.1",
-      port: 8545,
+      port: 7545,
     },
     testnet: {
       network_id: "2",
@@ -26,12 +26,11 @@ module.exports = {
       }
     },
   },
-    compilers: {
-      solc: {
-        version: "0.8.0",
-        docker: false,
-        parser: "solcjs"
-      }
-    
+  compilers: {
+    solc: {
+      version: "0.8.0",
+      docker: false,
+      parser: "solcjs"
+    }
   }
 }

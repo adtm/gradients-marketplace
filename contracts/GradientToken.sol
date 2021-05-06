@@ -6,23 +6,25 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./GradientDomain.sol";
 
+
 contract GradientToken is ERC721, Ownable, GradientDomain {
 
   using Counters for Counters.Counter;
-  Counters.Counter private tokenIds;
+  Counters.Counter private _tokenIds;
 
-  Gradient[] allGradients;
+  Gradient[] private allGradients;
   mapping (bytes32 => bool) usedGradients;
   mapping (uint256 => Gradient) public gradientByTokenId;
 
-  constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
+  constructor(string memory name, string memory symbol) 
+    ERC721(name, symbol) {}
 
   function createGradient(string memory left, string memory right) public onlyOwner returns (uint256) {
     bytes32 gradientHash = keccak256(abi.encodePacked(left, right));
     require(usedGradients[gradientHash] == false, "Gradient already exists");
 
-    tokenIds.increment();
-    uint256 tokenId = tokenIds.current();
+    _tokenIds.increment();
+    uint256 tokenId = _tokenIds.current();
 
     _mint(msg.sender, tokenId);
     Gradient memory gradient = Gradient(left, right);
@@ -45,4 +47,3 @@ contract GradientToken is ERC721, Ownable, GradientDomain {
 
   event CreatedGradient(uint256 tokenId);
 }
- 

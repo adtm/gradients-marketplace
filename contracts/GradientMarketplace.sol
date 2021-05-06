@@ -14,7 +14,6 @@ contract GradientMarketplace is GradientDomain {
     uint256 price;
   }
 
-
   GradientToken public gradientToken;
   mapping (uint256 => SellTransaction) public sellTransactionByTokenId;
 

@@ -4,7 +4,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 const MAIN_CHAIN_ID = "1666700000"
 const TESTNET_CHAIN_ID = "1666600000"
 
-const HARMONY_CHAIN_IDS = new Set([TESTNET_CHAIN_ID, MAIN_CHAIN_ID])
+const HARMONY_CHAIN_IDS = new Set([TESTNET_CHAIN_ID, MAIN_CHAIN_ID, 1337])
 
 const useEthereumProvider = () => {
   const { ethereum } = window as any;
