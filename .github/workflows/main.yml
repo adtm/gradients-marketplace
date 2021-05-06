@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checks out repository
+      - uses: actions/checkout@v2
+      
+      - name: Sets up Node
+        uses: actions/setup-node@v1
+      
+      - name: Installs dependencies
+        run: npm install
+  
+      - name: Runs tests
+        run: npm test
