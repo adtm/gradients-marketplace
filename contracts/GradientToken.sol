@@ -11,10 +11,11 @@ contract GradientToken is ERC721, Ownable, GradientDomain {
   using Counters for Counters.Counter;
   Counters.Counter private tokenIds;
 
-  mapping (uint256 => Gradient) public gradientByTokenId;
+  Gradient[] allGradients;
   mapping (bytes32 => bool) usedGradients;
+  mapping (uint256 => Gradient) public gradientByTokenId;
 
-  constructor() ERC721("Ichi", "ICHI") {}
+  constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
 
   function createGradient(string memory left, string memory right) public onlyOwner returns (uint256) {
     bytes32 gradientHash = keccak256(abi.encodePacked(left, right));
@@ -27,6 +28,7 @@ contract GradientToken is ERC721, Ownable, GradientDomain {
     Gradient memory gradient = Gradient(left, right);
     gradientByTokenId[tokenId] = gradient;
     usedGradients[gradientHash] = true;
+    allGradients.push(gradient);
 
     emit CreatedGradient(tokenId);
     return tokenId;
@@ -34,8 +36,11 @@ contract GradientToken is ERC721, Ownable, GradientDomain {
 
   function getGradient(uint256 tokenId) public view returns (string memory left, string memory right) {
     Gradient memory gradient = gradientByTokenId[tokenId];
-
     return (gradient.left, gradient.right);
+  }
+
+  function getAllGradients() public view returns (Gradient[] memory) {
+    return allGradients;
   }
 
   event CreatedGradient(uint256 tokenId);

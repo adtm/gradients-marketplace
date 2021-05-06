@@ -17,12 +17,12 @@ contract("Gradient marketplace", accounts => {
 
   const tokenId = new BN(1);
   const price = new BN(20);
-  
+
   let leftColor;
   let rightColor;
 
   beforeEach(async () => {
-    tokenInstance = await GradientToken.deployed();
+    tokenInstance = await GradientToken.deployed("", "");
     markeplaceInstance = await GradientMarketplace.deployed(tokenInstance.address);
 
     leftColor = faker.commerce.color();
@@ -117,7 +117,7 @@ contract("Gradient marketplace", accounts => {
           from: accounts[1]
         }),
         "Gradient is not for sale"
-      );  
+      );
     });
 
     it("shouldn't allow to buy an own gradient for the owner", async () => {
@@ -131,7 +131,7 @@ contract("Gradient marketplace", accounts => {
           from: accounts[0]
         }),
         "Gradient can't be bought by owner"
-      );  
+      );
     });
 
     it("should fail if sent transaction value is lower than gradient price", async () => {
@@ -146,10 +146,10 @@ contract("Gradient marketplace", accounts => {
           value: 1
         }),
         "Gradient price is higher than sent amount"
-      );  
+      );
     });
 
-    it("should buy a gradient when the seller approves it", async() => {
+    it("should buy a gradient when the seller approves it", async () => {
       await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] });
       await markeplaceInstance.sellGradient(new BN(9), price, {
         from: accounts[0]
@@ -162,7 +162,7 @@ contract("Gradient marketplace", accounts => {
         from: accounts[1],
         value: 200
       });
-      
+
       const transferredOwner = await tokenInstance.ownerOf(new BN(9));
       assert.deepEqual(transferredOwner, accounts[1]);
     });
