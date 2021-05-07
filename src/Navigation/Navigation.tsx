@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { useEthereumProvider } from '../hooks/ethereum'
+import { shortenAddress } from '../utils/addressShortener'
 
 const NetworkButton = () => {
   const { error, account, ethereum } = useEthereumProvider()
 
   const buttonText = () => {
     if (error) return error
-    if (account) return account?.slice(0, 4) + "..." + account?.slice(account.length - 4, account.length)
+    if (account) return shortenAddress(account);
     return "Connect Metamask"
   }
 
@@ -50,12 +51,7 @@ export default function Example() {
                   </Link>
                 </div>
                 <div className="hidden sm:flex sm:ml-10 w-full justify-end">
-                  <div className="space-x-5 flex items-center justify-content">
-                    <Link to="/create">
-                      <button className=" py-3 px-6 font-semibold rounded-lg shadow-md text-black bg-white hover:bg-gray-100">
-                        Create
-                      </button>
-                    </Link>
+                  <div className="space-x-5 flex items-center justify-content"> 
                     <NetworkButton />
                   </div>
                 </div>
@@ -85,11 +81,6 @@ const MobileMenuButton = ({ open }: { open: boolean }) => (
 const MobilePanel = () => (
   <Disclosure.Panel className="sm:hidden">
     <div className="px-2 pt-2 pb-3 space-y-2">
-      <Link to="/create">
-        <Disclosure.Button className="w-full py-3 px-6 font-semibold text-black bg-white">
-          Create
-      </Disclosure.Button>
-      </Link>
       <NetworkButton />
     </div>
   </Disclosure.Panel>

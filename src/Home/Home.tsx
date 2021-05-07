@@ -1,9 +1,7 @@
 //  @ts-nocheck
 import React, { useState } from 'react'
 import Card from '../Collectible/Card';
-import { Link } from 'react-router-dom';
-import collectibles from '../data/collectibles';
-import accounts from '../data/accounts';
+import { Link } from 'react-router-dom'; 
 import { useEthereumProvider } from '../hooks/ethereum';
 import Web3 from 'web3';
 
@@ -554,7 +552,32 @@ const Home = () => {
     console.log(err)
   });
 
-  const [gradients, setGradients] = useState([{left: "#ffbd00", right:"#00d4ff"}]);
+  const [gradients, setGradients] = useState([
+    { tokenId: 1, left:"#FCE38A", right: "#F38181", ownerAddress: "0xe591a38f0822AC1b386f0273A47Da32e4155fD99"},
+    { tokenId: 2, left:"#F54EA2", right: "#FF7676", ownerAddress: "0xe591a38f0822AC1b386f0273A47Da32e4155fD99"},
+    { tokenId: 3, left:"#17EAD9", right: "#6078EA", ownerAddress: "0xe591a38f0822AC1b386f0273A47Da32e4155fD99"},
+    { tokenId: 4, left:"#622774", right: "#C53364", ownerAddress: "0xe591a38f0822AC1b386f0273A47Da32e4155fD99"},
+    { tokenId: 5, left:"#7117EA", right: "#EA6060", ownerAddress: "0xe591a38f0822AC1b386f0273A47Da32e4155fD99"},
+    { tokenId: 6, left:"#42E695", right: "#3BB2B8", ownerAddress: "0xe591a38f0822AC1b386f0273A47Da32e4155fD99"},
+    { tokenId: 7, left:"#F02FC2", right: "#6094EA", ownerAddress: "0xe591a38f0822AC1b386f0273A47Da32e4155fD99"},
+    { tokenId: 8, left:"#65799B", right: "#5E2563", ownerAddress: "0xe591a38f0822AC1b386f0273A47Da32e4155fD99"},
+    { tokenId: 9, left:"#184E68", right: "#57CA85", ownerAddress: "0xe591a38f0822AC1b386f0273A47Da32e4155fD99"},
+    { tokenId: 10, left:"#58247A", right: "#1BCEDF", ownerAddress: "0xe591a38f0822AC1b386f0273A47Da32e4155fD99"},
+  ]);
+
+  const [sales, setSales] = useState({
+    1: {
+      price: 1000,
+    },
+    8: {
+      price: 2000
+    },
+    5: {
+      price: 10000
+    }
+  })
+
+
   contract.methods.getGradient(1).call().then((grads) => {
       
     console.log(grads)
@@ -582,24 +605,14 @@ const Home = () => {
           {gradients.map(gr => (
             <Link to={`/collectible/1`}>
               <Card collectible={{
-                ...{
-                  id: "1",
-                  name: "#yellow",
+                ... {
+                  id: gr.tokenId,
                   from: gr.left,
                   to: gr.right,
-                  image: "https://ipfs.rarible.com/ipfs/QmWTykz7LuoCXwJdMwZ1suCDS6defyJNgqZ1UEXKxbfs6P/image.png",
-                  quantity: {
-                    number: 1,
-                    from: 100
-                  },
-                  description: "Head: Riso Printed + Paint\nEyes: One, Round\nNose: Mostly Yellow\nMouth: Missing\nBust: Riso Printed + Paint",
-                  ownerId: "2",
-                  creatorId: "1",
-                  price: {
-                    one: 100000
-                  }
-                },
-                owner: accounts[1]
+                  ownerAddress: gr.ownerAddress,
+                  forSale: sales[gr.tokenId] ? true : false,
+                  price: sales[gr.tokenId] != null ? sales[gr.tokenId].price : null
+                }
               }} />
 
             </Link>
