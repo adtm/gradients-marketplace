@@ -1,24 +1,47 @@
-import React, { useState } from 'react'
-import accounts from '../data/accounts'
-import collectibles from '../data/collectibles'
-import { Account, Collectible } from '../types'
+
+// @ts-nocheck
+import React, { useState, useEffect } from 'react'
 import { shortenAddress } from '../utils/addressShortener'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
-interface Props {
-  collectibleId: string;
-}
+import Web3 from 'web3';
+import GradientTokenAbi from '../abi/GradientToken';
+import GradientMarketplaceAbi from '../abi/GradientMarketplace';
 
-const CollectibleScreen = ({ collectibleId }: Props) => {
 
-const data = { 
-  tokenId: 1, 
-  left:"#FCE38A", 
-  right: "#F38181", 
-  ownerAddress: "0xe591a38f0822AC1b386f0273A47Da32e4155fD99",
-  forSale: false,
-  price: 100000
-};
+const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+
+
+const CollectibleScreen = () => {
+
+  const { id } = useParams();
+  const [gradient, setGradient] = useState({})
+
+  const TokenContractAddress = '0xD16ad33F448D282bf3C024DDA259984A501b7e84'
+  const MarketplaceContractAddress = '0x4818979e6e9cc5c792449b5fcAB2526669343906'
+  const ContractDeployerAddress = '0x608C4624b803eD47aCd8A745Da391604b28e9613'
+
+  // @ts-ignore
+  const tokenContract = new web3.eth.Contract(GradientTokenAbi, TokenContractAddress, {
+    from: ContractDeployerAddress,
+  });
+
+  // @ts-ignore
+  const marketplaceContract = new web3.eth.Contract(GradientMarketplaceAbi, MarketplaceContractAddress, {
+    from: ContractDeployerAddress,
+  });
+
+  const getGradient = async () => {
+    const { left, right, owner } = await tokenContract.methods.getGradient(id).call();
+    const { price, forSale } = await marketplaceContract.methods.sellTransactionByTokenId(id).call();
+
+    const gradient = { id, left, right, owner, price, forSale }
+    setGradient(gradient);
+  }
+
+  useEffect(() => {
+    getGradient()
+  }, [])
   
   const DisabledBuyButton = () => {
     return <div className=" ">
@@ -33,7 +56,7 @@ const data = {
   const BuyButton = (price: number) => {
     const servicePrice = price / 100 * 1.5
     return <div className="">
-      <h3 className="text-3xl font-semibold py-1">{data.price.toLocaleString()} <span className="text-sm">ONE</span></h3>
+      <h3 className="text-3xl font-semibold py-1">{gradient.price.toLocaleString()} <span className="text-sm">ONE</span></h3>
       <button className="md:w-auto w-full my-3 px-20 py-3 font-semibold rounded-lg shadow-md text-white bg-black hover:bg-gray-700">
         Buy now
       </button>
@@ -49,28 +72,28 @@ const data = {
       <div className="flex flex-grow items-center justify-center">
         <div
         className={`w-96 h-96 rounded-md`}
-        style={{ background: `linear-gradient(135deg, ${data.left} 0%, ${data.right} 100%)` }}
+        style={{ background: `linear-gradient(135deg, ${gradient.left} 0%, ${gradient.right} 100%)` }}
       />
       </div>
       <div className="md:flex-1">
 
         <div className="pb-2 pt-5">
-          <h1 className="text-4xl font-bold">{data.left} - {data.right}</h1>
+          <h1 className="text-4xl font-bold">{gradient.left} - {gradient.right}</h1>
         </div>
  
 
         <div className="pb-3">
           <div className="flex items-center">
             <h3 className="font-semibold">of{" "}
-            <Link className="text-blue-500" to={`/owner/${data.ownerAddress}`}>
-                @{shortenAddress(data.ownerAddress)}
+            <Link className="text-blue-500" to={`/owner/${gradient.owner}`}>
+                @{shortenAddress(gradient.owner)}
               </Link>
             </h3>
           </div>
         </div> 
 
         <div className="pt-8 md:text-left text-center">
-          { data.forSale ? BuyButton(data.price) : DisabledBuyButton() }
+          { gradient.forSale ? BuyButton(gradient.price) : DisabledBuyButton() }
         </div>
         
       </div>

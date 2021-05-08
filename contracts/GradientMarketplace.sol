@@ -4,7 +4,6 @@ pragma solidity 0.8.0;
 import "./GradientToken.sol";
 import "./GradientDomain.sol";
 
-// @NOTE: get owner gradients
 contract GradientMarketplace is GradientDomain {
 
   struct SellTransaction {

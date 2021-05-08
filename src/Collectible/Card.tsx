@@ -2,11 +2,11 @@ import React from 'react'
 import { shortenAddress } from '../utils/addressShortener'
 import { Link } from 'react-router-dom'
 
-const Card = ({ collectible }: any) => {
+const Card = ({ gradient }: any) => {
 
+  
   const nonSaleButton = () => (
-    <div className="rounded-t-none w-full px-4 h-4 rounded-lg shadow-md " style={{ background: `linear-gradient(135deg, ${collectible.from} 0%, ${collectible.to} 100%)` }}>
-
+    <div className="rounded-t-none w-full px-4 h-4 rounded-lg shadow-md " style={{ background: `linear-gradient(135deg, ${gradient.left} 0%, ${gradient.right} 100%)` }}>
     </div>
   )
 
@@ -20,20 +20,20 @@ const Card = ({ collectible }: any) => {
     <div className="sm:w-56 m-3">
       <div
         className={`rounded-md rounded-b-none h-96 w-96 sm:w-56 sm:h-56`}
-        style={{ background: `linear-gradient(135deg, ${collectible.from} 0%, ${collectible.to} 100%)` }}
+        style={{ background: `linear-gradient(135deg, ${gradient.left} 0%, ${gradient.right} 100%)` }}
       />
       <div className="shadow-xl rounded-t-none rounded-md">
         <div className="px-4 py-4">
-          <h3 className="text-md font-semibold pb-2 break-all">{collectible.from} - {collectible.to}</h3>
+          <h3 className="text-md font-semibold pb-2 break-all">{gradient.left} - {gradient.right}</h3>
             <h4 className="text-xs ">of{" "}
             
-          <Link className="hover:text-blue-500" to={`/owner/${collectible.ownerAddress}`}>
-            @{shortenAddress(collectible.ownerAddress)}
+          <Link className="hover:text-blue-500" to={`/owner/${gradient.owner}`}>
+            @{shortenAddress(gradient.owner)}
           </Link>
 
             </h4>
         </div>
-        {collectible.forSale ? saleButton(collectible.price) : nonSaleButton()}
+        {gradient.forSale ? saleButton(gradient.price) : nonSaleButton()}
       </div>
     </div>
   )
