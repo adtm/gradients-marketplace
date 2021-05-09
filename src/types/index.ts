@@ -34,3 +34,11 @@ export interface Account {
   profileImage: string
 }
  
+export interface Gradient {
+  id: string;
+  left: string;
+  right: string;
+  owner: string;
+  price: string;
+  forSale: boolean;
+}

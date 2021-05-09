@@ -17,9 +17,9 @@ const CollectibleScreen = () => {
   const { id } = useParams();
   const [gradient, setGradient] = useState({})
 
-  const TokenContractAddress = '0xD16ad33F448D282bf3C024DDA259984A501b7e84'
-  const MarketplaceContractAddress = '0x4818979e6e9cc5c792449b5fcAB2526669343906'
-  const ContractDeployerAddress = '0x608C4624b803eD47aCd8A745Da391604b28e9613'
+  const TokenContractAddress = '0xDc3167542bfc1870418B21bDF73779193623dDE6'
+  const MarketplaceContractAddress = '0x069Fe2C37333b2518f78C67DC3d8ED5b0b0E57BA'
+  const ContractDeployerAddress = '0x79B2626a9DD5Cf8015eEd74409D76c6f0268dd24'
 
   // @ts-ignore
   const tokenContract = new web3.eth.Contract(GradientTokenAbi, TokenContractAddress, {

@@ -13,9 +13,9 @@ const Artist = () => {
   const { address } = useParams();
   const [gradients, setGradients] = useState([]);
 
-  const TokenContractAddress = '0xD16ad33F448D282bf3C024DDA259984A501b7e84'
-  const MarketplaceContractAddress = '0x4818979e6e9cc5c792449b5fcAB2526669343906'
-  const ContractDeployerAddress = '0x608C4624b803eD47aCd8A745Da391604b28e9613'
+  const TokenContractAddress = '0xDc3167542bfc1870418B21bDF73779193623dDE6'
+  const MarketplaceContractAddress = '0x069Fe2C37333b2518f78C67DC3d8ED5b0b0E57BA'
+  const ContractDeployerAddress = '0x79B2626a9DD5Cf8015eEd74409D76c6f0268dd24'
 
   const tokenContract = new web3.eth.Contract(GradientTokenAbi, TokenContractAddress, {
     from: ContractDeployerAddress,
@@ -38,12 +38,13 @@ const Artist = () => {
       fetchedGradients.push(gradient)
     }
 
+    console.log(fetchedGradients);
     setGradients(fetchedGradients);
   }
 
   const setForSale = async (id, price) => {
     await marketplaceContract.methods.sellGradient(id, price).send({
-      from: ContractDeployerAddress ,
+      from: ContractDeployerAddress,
       gas: 200000
     });
     await getGradients()
@@ -67,16 +68,7 @@ const Artist = () => {
       <div className="container mx-auto">
         <div className="flex flex-wrap flex-auto justify-center">
           {gradients.map(gradient => (
-            <>
-            <Link to={`/gradient/${gradient.id}`}>
-              <Card gradient={gradient} />
-              
-            </Link>
-            <button onClick={() => setForSale(gradient.id, 20000)}>set sale</button>
-            <p>|</p>
-            <button onClick={() => cancelSale(gradient.id)}>cancel sale</button>
-            </>
-            
+            <Card key={gradient.id} gradient={gradient} onCancelButton={cancelSale} onSellButton={setForSale} />
           ))}
         </div>
       </div>
