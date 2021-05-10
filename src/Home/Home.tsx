@@ -1,35 +1,19 @@
-//  @ts-nocheck
 import React, { useState, useEffect } from 'react'
 import Card from '../Collectible/Card';
-import { Link } from 'react-router-dom'; 
-import Web3 from 'web3';
-import GradientTokenAbi from '../abi/GradientToken';
-import GradientMarketplaceAbi from '../abi/GradientMarketplace';
-
-
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+import { Link } from 'react-router-dom';
+import { useEthereumProvider } from '../hooks/ethereum';
+import { Gradient } from '../types';
 
 const Home = () => {
- 
-  const [gradients, setGradients] = useState([]);
 
-  const TokenContractAddress = '0x457cb2fAFEa75651865E771E310D26d9860b581B'
-  const MarketplaceContractAddress = '0x710c720311db1d40A4d6ccE8cf7dB06A4b027aAa'
-  const ContractDeployerAddress = '0x9D584097794D87ca8Fe59e7f378C0AfFe79038B9'
-
-  const tokenContract = new web3.eth.Contract(GradientTokenAbi, TokenContractAddress, {
-    from: ContractDeployerAddress,
-  });
-
-  const marketplaceContract = new web3.eth.Contract(GradientMarketplaceAbi, MarketplaceContractAddress, {
-    from: ContractDeployerAddress,
-  });
+  const [gradients, setGradients] = useState<Gradient[]>([]);
+  const { account, contracts: { tokenContract, marketplaceContract } } = useEthereumProvider()
 
   const getGradients = async () => {
-// await tokenContract.methods.createGradient("#58247A", "#1BCEDF").send({
-//   from: ContractDeployerAddress,
-//   gas: 1000000
-// });
+    // await tokenContract.methods.createGradient("#58247A", "#EA6060").send({
+    //   from: account,
+    //   gas: 1000000
+    // });
 
     const totalSupply = await tokenContract.methods.totalSupply().call();
 
@@ -38,7 +22,8 @@ const Home = () => {
       const { left, right, owner } = await tokenContract.methods.getGradient(id).call();
       const { price, forSale } = await marketplaceContract.methods.sellTransactionByTokenId(id).call();
 
-      const gradient = { id, left, right, owner, price, forSale }
+      console.log(owner)
+      const gradient: Gradient = { id: id.toString(), left, right, owner, price, forSale }
       fetchedGradients.push(gradient)
     }
 
@@ -48,19 +33,19 @@ const Home = () => {
   useEffect(() => {
     getGradients()
   }, [])
-  
- 
+
+
   return (
 
-      <div className="container mx-auto">
-        <div className="flex flex-wrap flex-auto justify-center">
-          {gradients.map(gradient => (
-            <Link to={`/gradient/${gradient.id}`}>
-              <Card gradient={gradient} />
-            </Link>
-          ))}
-        </div>
+    <div className="container mx-auto">
+      <div className="flex flex-wrap flex-auto justify-center">
+        {gradients.map(gradient => (
+          <Link to={`/gradient/${gradient.id}`}>
+            <Card gradient={gradient} />
+          </Link>
+        ))}
       </div>
+    </div>
 
   )
 }

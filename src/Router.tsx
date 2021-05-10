@@ -16,10 +16,10 @@ const Router = () => {
       <Navigation />
       <div className="md:mx-10 md:my-10 sm:mx-10 sm:my-10 my-5 mx-5">
         <Switch>
-          <Route path="/gradient/:id" strict>
+          <Route  path="/gradient/:id" sensitive strict>
             <GradientScreen />
           </Route>
-          <Route path="/owner/:address" strict>
+          <Route  path="/owner/:address" sensitive strict>
             <Artist />
           </Route>
           <Route path="/" >

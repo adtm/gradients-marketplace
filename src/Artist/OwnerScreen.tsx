@@ -1,35 +1,21 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom';
 import { shortenAddress } from '../utils/addressShortener';
 import Card from '../Collectible/Card';
 import OwnerCard from '../Collectible/OwnerCard';
-import Web3 from 'web3';
-import GradientTokenAbi from '../abi/GradientToken';
-import GradientMarketplaceAbi from '../abi/GradientMarketplace';
 
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
-
+import { useEthereumProvider } from '../hooks/ethereum';
+import { Gradient } from '../types';
+ 
 const Artist = () => {
-  const { address } = useParams();
-
+  const { address } = useParams<{address: string}>();
+  
+  const { web3, account, contracts: { tokenContract, marketplaceContract }, addresses: {MarketplaceContractAddress} } = useEthereumProvider()
+  const isOwner = (address.toLowerCase() == (account || "").toLowerCase());
+  
   const [loading, setLoading] = useState(true);
-  const [gradients, setGradients] = useState([]);
-
-  const TokenContractAddress = '0x457cb2fAFEa75651865E771E310D26d9860b581B'
-  const MarketplaceContractAddress = '0x710c720311db1d40A4d6ccE8cf7dB06A4b027aAa'
-  const ContractDeployerAddress = '0x9D584097794D87ca8Fe59e7f378C0AfFe79038B9'
-
-  // get current address
-  const isOwner = (address == ContractDeployerAddress);
-
-  const tokenContract = new web3.eth.Contract(GradientTokenAbi, TokenContractAddress, {
-    from: ContractDeployerAddress,
-  });
-
-  const marketplaceContract = new web3.eth.Contract(GradientMarketplaceAbi, MarketplaceContractAddress, {
-    from: ContractDeployerAddress,
-  });
+  const [gradients, setGradients] = useState<Gradient[]>([]);
+  
 
   const getGradients = async () => {
     try {
@@ -51,23 +37,26 @@ const Artist = () => {
 
       setGradients(fetchedGradients);
     } catch (err) {
-      console.log("fix this error")
+      console.error(err);
     } finally {
       setLoading(false);
     }
   }
 
-  const setForSale = async (id, price) => {
+  const setForSale = async (id: string, price: string) => {
+    await tokenContract.methods.approve(MarketplaceContractAddress, id).send({
+      from: address,
+    });
     await marketplaceContract.methods.sellGradient(id, price).send({
-      from: ContractDeployerAddress,
+      from: address,
       gas: 200000
     });
     await getGradients()
   }
 
-  const cancelSale = async (id) => {
+  const cancelSale = async (id: string) => {
     await marketplaceContract.methods.cancelSellGradient(id).send({
-      from: ContractDeployerAddress,
+      from: address,
       gas: 200000
     });
     await getGradients()

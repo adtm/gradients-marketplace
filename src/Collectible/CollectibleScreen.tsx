@@ -1,36 +1,17 @@
-
-// @ts-nocheck
 import React, { useState, useEffect } from 'react'
 import { shortenAddress } from '../utils/addressShortener'
 import { Link, useParams } from 'react-router-dom'
 
-import Web3 from 'web3';
-import GradientTokenAbi from '../abi/GradientToken';
-import GradientMarketplaceAbi from '../abi/GradientMarketplace';
 import BN from 'bn.js';
-
-
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
-
+import { useEthereumProvider } from '../hooks/ethereum';
+import { Gradient } from '../types';
 
 const CollectibleScreen = () => {
 
-  const { id } = useParams();
-  const [gradient, setGradient] = useState({})
-
-  const TokenContractAddress = '0x457cb2fAFEa75651865E771E310D26d9860b581B'
-  const MarketplaceContractAddress = '0x710c720311db1d40A4d6ccE8cf7dB06A4b027aAa'
-  const ContractDeployerAddress = '0x9D584097794D87ca8Fe59e7f378C0AfFe79038B9'
-
+  const { id } = useParams<{id:string}>();
   // @ts-ignore
-  const tokenContract = new web3.eth.Contract(GradientTokenAbi, TokenContractAddress, {
-    from: ContractDeployerAddress,
-  });
-
-  // @ts-ignore
-  const marketplaceContract = new web3.eth.Contract(GradientMarketplaceAbi, MarketplaceContractAddress, {
-    from: ContractDeployerAddress,
-  });
+  const [gradient, setGradient] = useState<Gradient>({});
+  const { account, contracts: { tokenContract, marketplaceContract } } = useEthereumProvider()
 
   const getGradient = async () => {
     const { left, right, owner } = await tokenContract.methods.getGradient(id).call();
@@ -41,14 +22,9 @@ const CollectibleScreen = () => {
   }
 
   const buyGradient = async () => {
-    await tokenContract.methods.approve(MarketplaceContractAddress, id).send({
-      from: ContractDeployerAddress,
-    });
-
-    console.log("approved--")
     await marketplaceContract.methods.buyGradient(id).send({
-      from: "0x97705A004CB59be931Eee87776Aa69A139805d6E",
-      value: new BN(1000000),
+      from: account,
+      value: new BN(gradient.price),
       gas: 1000000
     });
     getGradient();
@@ -68,8 +44,8 @@ const CollectibleScreen = () => {
     </div>
   }
 
-  const BuyButton = (price: number) => {
-    const servicePrice = price / 100 * 1.5
+  const BuyButton = () => {
+    const servicePrice = Number(gradient.price) / 100 * 1.5
     return <div className="">
       <h3 className="text-3xl font-semibold py-1">{Number(gradient.price).toLocaleString()} <span className="text-sm">ONE</span></h3>
       <button onClick={buyGradient} className="md:w-auto w-full my-3 px-20 py-3 font-semibold rounded-lg shadow-md text-white bg-black hover:bg-gray-700">
@@ -105,7 +81,7 @@ const CollectibleScreen = () => {
         </div>
 
         <div className="pt-8 md:text-left text-center">
-          {gradient.forSale ? BuyButton(gradient.price) : DisabledBuyButton()}
+          {gradient.forSale ? BuyButton() : DisabledBuyButton()}
         </div>
 
       </div>

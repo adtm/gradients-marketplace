@@ -27,7 +27,6 @@ const SellModal = ({ id, open, setOpen, cancelButtonRef, onClickSell }: SellModa
 
   // @ts-ignore
   const onSubmit = (values) => {
-    console.log(values)
     onClickSell(id, values.price);
     setOpen(false);
   }
