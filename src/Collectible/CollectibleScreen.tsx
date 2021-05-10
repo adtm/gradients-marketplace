@@ -18,9 +18,9 @@ const CollectibleScreen = () => {
   const { id } = useParams();
   const [gradient, setGradient] = useState({})
 
-  const TokenContractAddress = '0xDc3167542bfc1870418B21bDF73779193623dDE6'
-  const MarketplaceContractAddress = '0x069Fe2C37333b2518f78C67DC3d8ED5b0b0E57BA'
-  const ContractDeployerAddress = '0x79B2626a9DD5Cf8015eEd74409D76c6f0268dd24'
+  const TokenContractAddress = '0x457cb2fAFEa75651865E771E310D26d9860b581B'
+  const MarketplaceContractAddress = '0x710c720311db1d40A4d6ccE8cf7dB06A4b027aAa'
+  const ContractDeployerAddress = '0x9D584097794D87ca8Fe59e7f378C0AfFe79038B9'
 
   // @ts-ignore
   const tokenContract = new web3.eth.Contract(GradientTokenAbi, TokenContractAddress, {
@@ -47,7 +47,7 @@ const CollectibleScreen = () => {
 
     console.log("approved--")
     await marketplaceContract.methods.buyGradient(id).send({
-      from: "0xb528BE1632B97d2cE23fd3C94493dB2d1072789E",
+      from: "0x97705A004CB59be931Eee87776Aa69A139805d6E",
       value: new BN(1000000),
       gas: 1000000
     });
@@ -71,16 +71,13 @@ const CollectibleScreen = () => {
   const BuyButton = (price: number) => {
     const servicePrice = price / 100 * 1.5
     return <div className="">
-      <h3 className="text-3xl font-semibold py-1">{gradient.price.toLocaleString()} <span className="text-sm">ONE</span></h3>
+      <h3 className="text-3xl font-semibold py-1">{Number(gradient.price).toLocaleString()} <span className="text-sm">ONE</span></h3>
       <button onClick={buyGradient} className="md:w-auto w-full my-3 px-20 py-3 font-semibold rounded-lg shadow-md text-white bg-black hover:bg-gray-700">
         Buy now
       </button>
       <p className="text-xs text-gray-500">Service fee <span className="text-gray-700 font-semibold">1.5%</span>, {servicePrice.toLocaleString()} ONE</p>
     </div>
   }
-
-
-
 
   return (
     <div className="md:flex mt-40">

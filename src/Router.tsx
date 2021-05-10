@@ -8,7 +8,7 @@ import {
 import GradientScreen from "./Collectible/CollectibleScreen";
 import Navigation from "./Navigation/Navigation";
 import Home from "./Home/Home";
-import Artist from "./Artist/Artist";
+import Artist from "./Artist/OwnerScreen";
 
 const Router = () => { 
   return (

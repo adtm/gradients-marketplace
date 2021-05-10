@@ -13,9 +13,9 @@ const Home = () => {
  
   const [gradients, setGradients] = useState([]);
 
-  const TokenContractAddress = '0xDc3167542bfc1870418B21bDF73779193623dDE6'
-  const MarketplaceContractAddress = '0x069Fe2C37333b2518f78C67DC3d8ED5b0b0E57BA'
-  const ContractDeployerAddress = '0x79B2626a9DD5Cf8015eEd74409D76c6f0268dd24'
+  const TokenContractAddress = '0x457cb2fAFEa75651865E771E310D26d9860b581B'
+  const MarketplaceContractAddress = '0x710c720311db1d40A4d6ccE8cf7dB06A4b027aAa'
+  const ContractDeployerAddress = '0x9D584097794D87ca8Fe59e7f378C0AfFe79038B9'
 
   const tokenContract = new web3.eth.Contract(GradientTokenAbi, TokenContractAddress, {
     from: ContractDeployerAddress,
@@ -26,7 +26,7 @@ const Home = () => {
   });
 
   const getGradients = async () => {
-// await tokenContract.methods.createGradient("#17EAD9", "#6078EA").send({
+// await tokenContract.methods.createGradient("#58247A", "#1BCEDF").send({
 //   from: ContractDeployerAddress,
 //   gas: 1000000
 // });

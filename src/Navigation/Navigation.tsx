@@ -52,6 +52,11 @@ export default function Example() {
                 </div>
                 <div className="hidden sm:flex sm:ml-10 w-full justify-end">
                   <div className="space-x-5 flex items-center justify-content"> 
+                    <div
+          className="inline-block h-10 w-10 rounded-full"
+          style={{ background: `linear-gradient(135deg, #17EAD9 0%, #6078EA 100%)` }}
+          
+        />
                     <NetworkButton />
                   </div>
                 </div>
