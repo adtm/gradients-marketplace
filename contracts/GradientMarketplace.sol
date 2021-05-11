@@ -3,8 +3,11 @@ pragma solidity 0.8.0;
 
 import "./GradientToken.sol";
 import "./GradientDomain.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract GradientMarketplace is GradientDomain {
+
+  using SafeMath for uint256;
 
   struct SellTransaction {
     uint256 tokenId;
@@ -20,18 +23,25 @@ contract GradientMarketplace is GradientDomain {
     uint256 date;
   }
 
+  address public beneficiary;
   GradientToken public gradientToken;
   mapping (uint256 => SellTransaction) public sellTransactionByTokenId;
   mapping (uint256 => Transaction[]) public transactionsByTokenId;
 
-  constructor(address tokenAddress) {
+  constructor(address tokenAddress, address beneficiaryAddress) {
     gradientToken = GradientToken(tokenAddress); 
+    beneficiary = beneficiaryAddress
   }
 
   modifier onlyGradientOwner(uint256 tokenId) {
     address ownerAddress = gradientToken.ownerOf(tokenId);
     require(msg.sender == ownerAddress, "Gradient doesn't belong to you");
     _;
+  }
+
+  function calculatePrice(uint256 price) internal pure returns (uint256 cut, uint256 totalPrice) {
+    cut = price.mul(uint256(10)).div(uint256(1000)).mul(uint256(15));
+    totalPrice = price.mul(uint256(10)).div(uint256(1000)).mul(uint256(985)); 
   }
 
   function sellGradient(uint256 tokenId, uint256 price) public onlyGradientOwner(tokenId) returns (bool) {
@@ -53,7 +63,9 @@ contract GradientMarketplace is GradientDomain {
     require(sellTransaction.owner != msg.sender, "Gradient can't be bought by owner");
     require(msg.value >= sellTransaction.price, "Gradient price is higher than sent amount");
 
-    if (!sellTransaction.owner.send(msg.value)) {
+    cut, totalPrice = calculatePrice(msg.value);
+
+    if (!sellTransaction.owner.send(totalPrice) || !beneficiary.send(cut)) {
       revert();
     }
 

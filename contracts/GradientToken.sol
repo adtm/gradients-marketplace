@@ -13,6 +13,7 @@ contract GradientToken is ERC721, ERC721Enumerable, Ownable, GradientDomain {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
+  uint256 MAX_SUPPLY = 100;
   mapping (bytes32 => bool) usedGradients;
   mapping (uint256 => Gradient) gradientById;
 
@@ -25,6 +26,7 @@ contract GradientToken is ERC721, ERC721Enumerable, Ownable, GradientDomain {
     require(usedGradients[gradientHash] == false, "Gradient already exists");
     
     uint256 _id = _tokenIds.current();
+    require(_id < MAX_SUPPLY, "Gradient limit reached");
     Gradient memory gradient = Gradient(left, right);
     
     _mint(msg.sender, _id);

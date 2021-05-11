@@ -97,12 +97,12 @@ export default function Example({ id }: { id: string }) {
 										</td>
 										<td className="px-6 py-4 font-medium">
 											<Link to={`/owner/${transaction.owner}`}>
-												<div className="text-sm">{shortenAddress(transaction.owner)}</div>
+												<div className="text-sm hover:text-blue-500">@{shortenAddress(transaction.owner)}</div>
 											</Link>
 										</td>
 										<td className="px-6 py-4  font-medium">
 											<Link to={`/owner/${transaction.buyer}`}>
-												<div className="text-sm">{shortenAddress(transaction.buyer)}</div>
+												<div className="text-sm hover:text-blue-500">@{shortenAddress(transaction.buyer)}</div>
 											</Link>
 										</td>
 										<td className="px-6 py-4  ">

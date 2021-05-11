@@ -41,18 +41,18 @@ const CollectibleScreen = () => {
       <button disabled className="md:w-auto w-full my-3 px-20 py-3 font-semibold rounded-lg shadow-md text-white bg-black bg-gray-700">
         Not for sale
       </button>
-      <p className="text-xs text-gray-500">Service fee <span className="text-gray-700 font-semibold">1.5%</span></p>
+
     </div>
   }
 
   const BuyButton = () => {
-    const servicePrice = Number(gradient.price) / 100 * 1.5
+
     return <div className="">
       <h3 className="text-3xl font-semibold py-1">{Number(gradient.price).toLocaleString()} <span className="text-sm">ONE</span></h3>
       <button onClick={buyGradient} className="md:w-auto w-full my-3 px-20 py-3 font-semibold rounded-lg shadow-md text-white bg-black hover:bg-gray-700">
         Buy now
       </button>
-      <p className="text-xs text-gray-500">Service fee <span className="text-gray-700 font-semibold">1.5%</span>, {servicePrice.toLocaleString()} ONE</p>
+
     </div>
   }
 
