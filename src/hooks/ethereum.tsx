@@ -5,9 +5,9 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import GradientTokenAbi from '../abi/GradientToken';
 import GradientMarketplaceAbi from '../abi/GradientMarketplace';
 
-const TokenContractAddress = '0x457cb2fAFEa75651865E771E310D26d9860b581B'
-const MarketplaceContractAddress = '0x710c720311db1d40A4d6ccE8cf7dB06A4b027aAa'
-const ContractDeployerAddress = '0x9D584097794D87ca8Fe59e7f378C0AfFe79038B9'
+const TokenContractAddress = '0x35Be040CA6CB7Ba6F2CEc5f73e5c05455e93b539'
+const MarketplaceContractAddress = '0x36327EB163A96d2231ac564A10Bacd19a23f565A'
+const ContractDeployerAddress = '0x229a04f2dcDc410C803F3cDa4c489A1Ce62A05b1'
 
 
 const MAIN_CHAIN_ID = "1666700000"

@@ -4,11 +4,12 @@ import { Link, useParams } from 'react-router-dom'
 
 import BN from 'bn.js';
 import { useEthereumProvider } from '../hooks/ethereum';
+import TransactionTable from './TransactionTable';
 import { Gradient } from '../types';
 
 const CollectibleScreen = () => {
 
-  const { id } = useParams<{id:string}>();
+  const { id } = useParams<{ id: string }>();
   // @ts-ignore
   const [gradient, setGradient] = useState<Gradient>({});
   const { account, contracts: { tokenContract, marketplaceContract } } = useEthereumProvider()
@@ -56,34 +57,44 @@ const CollectibleScreen = () => {
   }
 
   return (
-    <div className="md:flex mt-40">
-      <div className="flex flex-grow items-center justify-center">
-        <div
-          className={`w-96 h-96 rounded-md`}
-          style={{ background: `linear-gradient(135deg, ${gradient.left} 0%, ${gradient.right} 100%)` }}
-        />
-      </div>
-      <div className="md:flex-1">
+    <div>
 
-        <div className="pb-2 pt-5">
-          <h1 className="text-4xl font-bold">{gradient.left} - {gradient.right}</h1>
+
+      <div className="md:flex mt-40">
+        <div className="flex flex-grow items-center justify-center">
+          <div
+            className={`w-96 h-96 rounded-md`}
+            style={{ background: `linear-gradient(135deg, ${gradient.left} 0%, ${gradient.right} 100%)` }}
+          />
         </div>
+        <div className="md:flex-1">
 
-
-        <div className="pb-3">
-          <div className="flex items-center">
-            <h3 className="font-semibold">of{" "}
-              <Link className="text-blue-500" to={`/owner/${gradient.owner}`}>
-                @{shortenAddress(gradient.owner)}
-              </Link>
-            </h3>
+          <div className="pb-2 pt-5">
+            <h1 className="text-4xl font-bold">{gradient.left} - {gradient.right}</h1>
           </div>
-        </div>
 
-        <div className="pt-8 md:text-left text-center">
-          {gradient.forSale ? BuyButton() : DisabledBuyButton()}
-        </div>
 
+          <div className="pb-3">
+            <div className="flex items-center">
+              <h3 className="font-semibold">of{" "}
+                <Link className="text-blue-500" to={`/owner/${gradient.owner}`}>
+                  @{shortenAddress(gradient.owner)}
+                </Link>
+              </h3>
+            </div>
+          </div>
+
+          <div className="pt-8 md:text-left text-center">
+            {gradient.forSale ? BuyButton() : DisabledBuyButton()}
+          </div>
+
+        </div>
+      </div>
+      <div className="mt-20 w-full md:w-2/3 lg:w-1/2 m-auto">
+        <p className="text-sm mb-5">Transactions</p>
+        <div >
+          <TransactionTable id={gradient.id} />
+        </div>
       </div>
     </div>
   )

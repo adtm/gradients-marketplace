@@ -28,4 +28,5 @@ Epic -> NFT Screen
 ```
   npx truffle compile
   npx truffle migrate
+  npx truffle deploy
 ```

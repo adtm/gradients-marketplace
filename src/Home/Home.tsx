@@ -10,7 +10,8 @@ const Home = () => {
   const { account, contracts: { tokenContract, marketplaceContract } } = useEthereumProvider()
 
   const getGradients = async () => {
-    // await tokenContract.methods.createGradient("#58247A", "#EA6060").send({
+    // console.log(account)
+    // await tokenContract.methods.createGradient("#F5799B", "#FF78EA").send({
     //   from: account,
     //   gas: 1000000
     // });
