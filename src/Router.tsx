@@ -5,10 +5,10 @@ import {
   Route
 } from "react-router-dom";
 
-import GradientScreen from "./Collectible/CollectibleScreen";
+import GradientScreen from "./Screens/Gradient";
 import Navigation from "./Navigation/Navigation";
-import Home from "./Home/Home";
-import Artist from "./Artist/OwnerScreen";
+import Home from "./Screens/Home";
+import Artist from "./Screens/Owner";
 
 const Router = () => { 
   return (

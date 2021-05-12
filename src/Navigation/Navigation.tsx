@@ -22,17 +22,9 @@ const NetworkButton = () => {
   }
 
   return (
-
-    <Menu as="div">
-      {() => (
-        <>
-          <Menu.Button onClick={ethereum.enable} className={`w-full sm:w-auto py-3 px-6 font-semibold rounded-lg  shadow-md ${buttonStyles()}`}>
-            {buttonText()}
-          </Menu.Button>
-        </>
-      )}
-    </Menu>
-
+    <button onClick={ethereum.enable} className={`w-full sm:w-auto py-3 px-6 font-semibold rounded-lg  shadow-md ${buttonStyles()}`}>
+      {buttonText()}
+    </button>
   )
 }
 

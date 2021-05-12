@@ -23,14 +23,12 @@ contract GradientMarketplace is GradientDomain {
     uint256 date;
   }
 
-  address public beneficiary;
   GradientToken public gradientToken;
   mapping (uint256 => SellTransaction) public sellTransactionByTokenId;
   mapping (uint256 => Transaction[]) public transactionsByTokenId;
 
-  constructor(address tokenAddress, address beneficiaryAddress) {
+  constructor(address tokenAddress) {
     gradientToken = GradientToken(tokenAddress); 
-    beneficiary = beneficiaryAddress
   }
 
   modifier onlyGradientOwner(uint256 tokenId) {
@@ -38,12 +36,7 @@ contract GradientMarketplace is GradientDomain {
     require(msg.sender == ownerAddress, "Gradient doesn't belong to you");
     _;
   }
-
-  function calculatePrice(uint256 price) internal pure returns (uint256 cut, uint256 totalPrice) {
-    cut = price.mul(uint256(10)).div(uint256(1000)).mul(uint256(15));
-    totalPrice = price.mul(uint256(10)).div(uint256(1000)).mul(uint256(985)); 
-  }
-
+  
   function sellGradient(uint256 tokenId, uint256 price) public onlyGradientOwner(tokenId) returns (bool) {
     require(price > 0, "Sell price cannot be negative or zero");
 
@@ -63,9 +56,7 @@ contract GradientMarketplace is GradientDomain {
     require(sellTransaction.owner != msg.sender, "Gradient can't be bought by owner");
     require(msg.value >= sellTransaction.price, "Gradient price is higher than sent amount");
 
-    cut, totalPrice = calculatePrice(msg.value);
-
-    if (!sellTransaction.owner.send(totalPrice) || !beneficiary.send(cut)) {
+    if (!sellTransaction.owner.send(msg.value)) {
       revert();
     }
 
@@ -96,7 +87,7 @@ contract GradientMarketplace is GradientDomain {
     address owner, 
     uint256 price, 
     uint256 date
-    ) {
+  ) {
     Transaction memory transaction = transactionsByTokenId[tokenId][index];
     owner = transaction.buyer;
     buyer = transaction.owner;
