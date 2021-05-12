@@ -54,12 +54,15 @@ const useEthereumProvider = () => {
     const chainId = await ethereum.request({ method: 'eth_chainId' });
     _handleChainIdChanged(chainId);
 
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    _handleAccountsChanged(accounts);
+
     ethereum.on('accountsChanged', _handleAccountsChanged)
     ethereum.on('chainChanged', _handleChainIdChanged);
   }
 
   const _handleChainIdChanged = (chainId: string) => {
-    const chainIdInDec = BigInt(chainId).toString(10)
+    const chainIdInDec = BigInt(chainId).toString(10);
     if (!HARMONY_CHAIN_IDS.has(chainIdInDec)) {
       setError("Wrong network")
     } else {
