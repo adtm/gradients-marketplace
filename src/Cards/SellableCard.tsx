@@ -33,7 +33,7 @@ const SellableCard = ({ gradient, onCancelButton, onSellButton }: OwnerGradientC
         className="rounded-md rounded-b-none h-96 w-96 sm:w-56 sm:h-56"
       />
       <div className="absolute top-0 right-0 m-2 space-x-2">
-        <SettingsDropdown id={gradient.id} onCancelSale={onCancelButton} onSetSale={() => setOpen(true)} />
+        <SettingsDropdown onSale={gradient.forSale} id={gradient.id} onCancelSale={onCancelButton} onSetSale={() => setOpen(true)} />
         <PreviewButton id={gradient.id} />
       </div>
       <SellModal id={gradient.id} open={open} cancelButtonRef={cancelButtonRef} setOpen={setOpen} onClickSell={onSellButton} />

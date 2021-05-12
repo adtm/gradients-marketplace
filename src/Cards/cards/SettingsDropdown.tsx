@@ -1,18 +1,13 @@
 import React, { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react';
-
-// @ts-ignore
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
 interface SettingsDropdownProps {
   id: string;
+  onSale: boolean;
   onSetSale: () => void;
   onCancelSale: (id: string) => void;
 }
 
-const SettingsDropdown = ({ id, onSetSale, onCancelSale, }: SettingsDropdownProps) => (
+const SettingsDropdown = ({ id, onSale, onSetSale, onCancelSale, }: SettingsDropdownProps) => (
   <Menu as="button" className="relative font-medium inline-block text-left">
     {({ open }) => (
       <>
@@ -41,29 +36,23 @@ const SettingsDropdown = ({ id, onSetSale, onCancelSale, }: SettingsDropdownProp
           >
             <div className="py-1">
               <Menu.Item>
-                {({ active }) => (
-                  <button
+                {() => (
+                  <div
                     onClick={() => onSetSale()}
-                    className={classNames(
-                      active ? 'text-gray-900' : 'text-gray-700',
-                      'block px-4 py-2 text-sm'
-                    )}
+                    className={`block px-4 py-2 text-sm text-gray-700`}
                   >
                     Put for Sale
-                  </button>
+                  </div>
                 )}
               </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <button
+              <Menu.Item disabled={onSale}>
+                {() => (
+                  <div
                     onClick={() => onCancelSale(id)}
-                    className={classNames(
-                      active ? ' text-gray-900' : 'text-gray-700',
-                      'block px-4 py-2 text-sm'
-                    )}
+                    className={`block px-4 py-2 text-sm ${!onSale ? "cursor-not-allowed text-gray-300" : "text-gray-700 "}`}
                   >
                     Cancel Sale
-                  </button>
+                  </div>
                 )}
               </Menu.Item>
             </div>
