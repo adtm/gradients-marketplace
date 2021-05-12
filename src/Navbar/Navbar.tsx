@@ -1,4 +1,4 @@
-import React  from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { Disclosure } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
@@ -45,12 +45,14 @@ export default function Navbar() {
                 </div>
                 <div className="hidden sm:flex sm:ml-10 w-full justify-end">
                   <div className="space-x-5 flex items-center justify-content">
-                    <Link to={`/owner/${account}`} className="p-0 m-0 h-10 w-10 ">
-                      <div
-                        className={`inline-block h-10 w-10 rounded-full ring-offset-2 hover:ring-2 ring-green-300`}
-                        style={{ background: `linear-gradient(135deg, #17EAD9 0%, #6078EA 100%)` }}
-                      />
-                    </Link>
+                    {
+                      account ? <Link to={`/owner/${account}`} className="p-0 m-0 h-10 w-10 ">
+                        <div
+                          className={`inline-block h-10 w-10 rounded-full ring-offset-2 hover:ring-2 ring-green-300`}
+                          style={{ background: `linear-gradient(135deg, #17EAD9 0%, #6078EA 100%)` }}
+                        />
+                      </Link> : null
+                    }
                     <NetworkButton />
                   </div>
                 </div>

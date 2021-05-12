@@ -57,7 +57,7 @@ const Home = () => {
   useEffect(() => {
     // mintTokens()
     getGradients()
-  }, [account])
+  }, [])
 
   return (
     <div className="container mx-auto">

@@ -58,7 +58,7 @@ const GradientScreen = () => {
     getGradient();
     getTransactions();
     setLoading(false);
-  }, [account])
+  }, [])
 
 
   return (

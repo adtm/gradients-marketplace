@@ -1,4 +1,5 @@
 import React from 'react'
+import { useEthereumProvider } from '../hooks/ethereum'
 
 
 interface BuyButtonProps {
@@ -8,6 +9,15 @@ interface BuyButtonProps {
 }
 
 const BuyButton = ({ isOwner, price, buyGradient }: BuyButtonProps) => {
+
+  const { ethereum, account } = useEthereumProvider();
+
+  const NotConnectedButton = () => (
+    <button onClick={ethereum.enable} className="md:w-auto w-full my-3 px-20 py-3 font-semibold rounded-lg shadow-md text-white bg-black hover:bg-gray-700">
+      Connect Metamask
+    </button>
+  )
+
   const SellableButton = () => (
     <button onClick={buyGradient} className="md:w-auto w-full my-3 px-20 py-3 font-semibold rounded-lg shadow-md text-white bg-black hover:bg-gray-700">
       Buy now
@@ -23,7 +33,7 @@ const BuyButton = ({ isOwner, price, buyGradient }: BuyButtonProps) => {
   return (
     <div>
       <h3 className="text-3xl font-semibold py-1">{Number(price).toLocaleString()} <span className="text-sm">ONE</span></h3>
-      {isOwner ? <OwnerSellableButton /> : <SellableButton />}
+      {!account ? <NotConnectedButton /> : isOwner ? <OwnerSellableButton /> : <SellableButton />}
     </div>
   )
 }

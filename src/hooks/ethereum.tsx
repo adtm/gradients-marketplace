@@ -53,11 +53,7 @@ const useEthereumProvider = () => {
     const chainId = await ethereum.request({ method: 'eth_chainId' });
     _handleChainIdChanged(chainId);
 
-    setInterval(async () => {
-      const account = await ethereum.request({ method: 'eth_accounts' })
-      _handleAccountsChanged(account)
-    }, 1000)
-
+    ethereum.on('accountsChanged', _handleAccountsChanged)
     ethereum.on('chainChanged', _handleChainIdChanged);
   }
 

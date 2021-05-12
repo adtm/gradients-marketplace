@@ -65,7 +65,7 @@ const Owner = () => {
 
   useEffect(() => {
     getGradients()
-  }, [account])
+  }, [])
 
   const renderEmpty = () => {
     return <div className="m-5 text-center">
@@ -94,7 +94,7 @@ const Owner = () => {
     <div >
       <h1 className="text-xl text-center p-5 font-semibold">{shortenAddress(address)}</h1>
       <Transition
-        show={!loading && !!account}
+        show={!loading}
         enter="transition-opacity duration-300"
         enterFrom="opacity-0"
         enterTo="opacity-100"
