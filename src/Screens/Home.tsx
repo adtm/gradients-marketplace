@@ -59,7 +59,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    mintTokens()
+    // mintTokens()
     getGradients()
   }, [])
 
