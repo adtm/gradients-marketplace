@@ -1,16 +1,16 @@
-
-import React, { useEffect, useState, Fragment } from 'react'
+import React  from 'react'
 import { Link } from 'react-router-dom'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Disclosure } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { useEthereumProvider } from '../hooks/ethereum'
+import { shortenAddress } from '../utils/addressShortener'
 
 const NetworkButton = () => {
   const { error, account, ethereum } = useEthereumProvider()
 
   const buttonText = () => {
     if (error) return error
-    if (account) return account?.slice(0, 4) + "..." + account?.slice(account.length - 4, account.length)
+    if (account) return shortenAddress(account);
     return "Connect Metamask"
   }
 
@@ -21,21 +21,15 @@ const NetworkButton = () => {
   }
 
   return (
-
-    <Menu as="div">
-      {() => (
-        <>
-          <Menu.Button onClick={ethereum.enable} className={`w-full sm:w-auto py-3 px-6 font-semibold rounded-lg  shadow-md ${buttonStyles()}`}>
-            {buttonText()}
-          </Menu.Button>
-        </>
-      )}
-    </Menu>
-
+    <button onClick={ethereum.enable} className={`w-full sm:w-auto py-3 px-6 font-semibold rounded-lg  shadow-md ${buttonStyles()}`}>
+      {buttonText()}
+    </button>
   )
 }
 
-export default function Example() {
+export default function Navbar() {
+  const { account } = useEthereumProvider();
+
   return (
     <Disclosure as="nav" >
       {({ open }) => (
@@ -51,10 +45,11 @@ export default function Example() {
                 </div>
                 <div className="hidden sm:flex sm:ml-10 w-full justify-end">
                   <div className="space-x-5 flex items-center justify-content">
-                    <Link to="/create">
-                      <button className=" py-3 px-6 font-semibold rounded-lg shadow-md text-black bg-white hover:bg-gray-100">
-                        Create
-                      </button>
+                    <Link to={`/owner/${account}`} className="p-0 m-0 h-10 w-10 ">
+                      <button
+                        className={`inline-block h-10 w-10 rounded-full ring-offset-2 hover:ring-2 ring-green-300`}
+                        style={{ background: `linear-gradient(135deg, #17EAD9 0%, #6078EA 100%)` }}
+                      />
                     </Link>
                     <NetworkButton />
                   </div>
@@ -85,11 +80,6 @@ const MobileMenuButton = ({ open }: { open: boolean }) => (
 const MobilePanel = () => (
   <Disclosure.Panel className="sm:hidden">
     <div className="px-2 pt-2 pb-3 space-y-2">
-      <Link to="/create">
-        <Disclosure.Button className="w-full py-3 px-6 font-semibold text-black bg-white">
-          Create
-      </Disclosure.Button>
-      </Link>
       <NetworkButton />
     </div>
   </Disclosure.Panel>

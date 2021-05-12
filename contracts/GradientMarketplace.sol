@@ -3,9 +3,11 @@ pragma solidity 0.8.0;
 
 import "./GradientToken.sol";
 import "./GradientDomain.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-// @NOTE: get owner gradients
 contract GradientMarketplace is GradientDomain {
+
+  using SafeMath for uint256;
 
   struct SellTransaction {
     uint256 tokenId;
@@ -14,9 +16,16 @@ contract GradientMarketplace is GradientDomain {
     uint256 price;
   }
 
+  struct Transaction {
+    address owner;
+    address buyer;
+    uint256 price;
+    uint256 date;
+  }
 
   GradientToken public gradientToken;
   mapping (uint256 => SellTransaction) public sellTransactionByTokenId;
+  mapping (uint256 => Transaction[]) public transactionsByTokenId;
 
   constructor(address tokenAddress) {
     gradientToken = GradientToken(tokenAddress); 
@@ -27,7 +36,7 @@ contract GradientMarketplace is GradientDomain {
     require(msg.sender == ownerAddress, "Gradient doesn't belong to you");
     _;
   }
-
+  
   function sellGradient(uint256 tokenId, uint256 price) public onlyGradientOwner(tokenId) returns (bool) {
     require(price > 0, "Sell price cannot be negative or zero");
 
@@ -42,25 +51,48 @@ contract GradientMarketplace is GradientDomain {
   }
 
   function buyGradient(uint256 tokenId) external payable returns (bool) {
-    SellTransaction memory transaction = sellTransactionByTokenId[tokenId];
-    require(transaction.forSale == true, "Gradient is not for sale");
-    require(transaction.owner != msg.sender, "Gradient can't be bought by owner");
-    require(msg.value >= transaction.price, "Gradient price is higher than sent amount");
+    SellTransaction memory sellTransaction = sellTransactionByTokenId[tokenId];
+    require(sellTransaction.forSale == true, "Gradient is not for sale");
+    require(sellTransaction.owner != msg.sender, "Gradient can't be bought by owner");
+    require(msg.value >= sellTransaction.price, "Gradient price is higher than sent amount");
 
-    uint256 payableAmount = msg.value - transaction.price;
-
-    if (!transaction.owner.send(payableAmount)) {
+    if (!sellTransaction.owner.send(msg.value)) {
       revert();
     }
 
-    gradientToken.safeTransferFrom(transaction.owner, msg.sender, tokenId);
+    gradientToken.safeTransferFrom(sellTransaction.owner, msg.sender, tokenId);
     delete sellTransactionByTokenId[tokenId];
+    
+    Transaction memory transaction;
+    transaction.owner = sellTransaction.owner;
+    transaction.buyer = msg.sender;
+    transaction.date = block.timestamp;
+    transaction.price = msg.value;
+
+    transactionsByTokenId[tokenId].push(transaction);
     return true;
   }
 
   function cancelSellGradient(uint256 tokenId) public onlyGradientOwner(tokenId) returns (bool) {
     delete sellTransactionByTokenId[tokenId];
     return true;
+  }
+
+  function getTransactionCount(uint256 tokenId) public view returns (uint256 length) {
+    return transactionsByTokenId[tokenId].length;
+  }
+
+  function getTransaction(uint256 tokenId, uint256 index) public view returns (
+    address buyer, 
+    address owner, 
+    uint256 price, 
+    uint256 date
+  ) {
+    Transaction memory transaction = transactionsByTokenId[tokenId][index];
+    owner = transaction.buyer;
+    buyer = transaction.owner;
+    price = transaction.price;
+    date = transaction.date;
   }
 
 }
