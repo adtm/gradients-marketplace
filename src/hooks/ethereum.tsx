@@ -51,14 +51,18 @@ const useEthereumProvider = () => {
   }
 
   const _connectProvider = async () => {
-    const chainId = await ethereum.request({ method: 'eth_chainId' });
-    _handleChainIdChanged(chainId);
-
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    _handleAccountsChanged(accounts);
-
-    ethereum.on('accountsChanged', _handleAccountsChanged)
-    ethereum.on('chainChanged', _handleChainIdChanged);
+    try {
+      const chainId = await ethereum.request({ method: 'eth_chainId' });
+      _handleChainIdChanged(chainId);
+  
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      _handleAccountsChanged(accounts);
+  
+      ethereum.on('accountsChanged', _handleAccountsChanged)
+      ethereum.on('chainChanged', _handleChainIdChanged);
+    } catch (err) {
+      console.error(err)
+    };
   }
 
   const _handleChainIdChanged = (chainId: string) => {
