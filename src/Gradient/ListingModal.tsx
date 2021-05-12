@@ -70,7 +70,7 @@ const ListingModal = ({ id, open, setOpen, cancelButtonRef, onClickSell }: Listi
               <Formik
                 initialValues={initialValues}
                 validate={({ price }) => {
-                  if (price == "") return { price: "Price is required" }
+                  if (price === "") return { price: "Price is required" }
                   if (Number(price) <= 0) return { price: "Price must be greather than 0" }
                 }}
                 onSubmit={onSubmit}

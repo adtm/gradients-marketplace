@@ -57,7 +57,7 @@ const Home = () => {
   useEffect(() => {
     // mintTokens()
     getGradients()
-  }, [])
+  }, [account])
 
   return (
     <div className="container mx-auto">
@@ -72,7 +72,7 @@ const Home = () => {
       >
         <div className="flex flex-wrap flex-auto justify-center">
           {gradients.map(gradient => (
-            <Link to={`/gradient/${gradient.id}`}>
+            <Link key={gradient.id} to={`/gradient/${gradient.id}`}>
               <DisplayCard gradient={gradient} />
             </Link>
           ))}

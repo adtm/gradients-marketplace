@@ -13,7 +13,7 @@ const Owner = () => {
   const { address } = useParams<{ address: string }>();
 
   const { web3, account, contracts: { tokenContract, marketplaceContract }, addresses: { MarketplaceContractAddress } } = useEthereumProvider()
-  const isOwner = account ? address.toLowerCase() == account.toLowerCase() : false;
+  const isOwner = account ? address.toLowerCase() === account.toLowerCase() : false;
 
   const [loading, setLoading] = useState(true);
   const [gradients, setGradients] = useState<Gradient[]>([]);
@@ -65,7 +65,7 @@ const Owner = () => {
 
   useEffect(() => {
     getGradients()
-  }, [])
+  }, [account])
 
   const renderEmpty = () => {
     return <div className="m-5 text-center">
@@ -84,7 +84,7 @@ const Owner = () => {
   const renderedCards = () => {
     if (isOwner) return gradients.map(gradient => <SellableCard key={gradient.id} gradient={gradient} onCancelButton={cancelSale} onSellButton={setForSale} />)
     return gradients.map(gradient => (
-      <Link to={`/gradient/${gradient.id}`}>
+      <Link key={gradient.id} to={`/gradient/${gradient.id}`}>
         <DisplayCard gradient={gradient} />
       </Link>
     ))
@@ -94,7 +94,7 @@ const Owner = () => {
     <div >
       <h1 className="text-xl text-center p-5 font-semibold">{shortenAddress(address)}</h1>
       <Transition
-        show={!loading}
+        show={!loading && !!account}
         enter="transition-opacity duration-300"
         enterFrom="opacity-0"
         enterTo="opacity-100"

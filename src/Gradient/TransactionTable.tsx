@@ -10,7 +10,7 @@ interface TransactionTableProps {
 
 export default function TransactionTable({ transactions }: TransactionTableProps) {
 
-  if (transactions.length == 0) {
+  if (transactions.length === 0) {
     return (
       <p className="text-xs">No transactions yet 🌻</p>
     )

@@ -93,7 +93,7 @@ const GradientScreen = () => {
               </div>
             </div>
             <div className="pt-8 md:text-left text-center">
-              {gradient.forSale ? <BuyButton isOwner={gradient.owner.toLowerCase() == account?.toLowerCase()} price={Number(gradient.price)} buyGradient={buyGradient} /> : <DisabledBuyButton />}
+              {gradient.forSale ? <BuyButton isOwner={gradient.owner.toLowerCase() === account?.toLowerCase()} price={Number(gradient.price)} buyGradient={buyGradient} /> : <DisabledBuyButton />}
             </div>
           </div>
         </div>
