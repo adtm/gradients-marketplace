@@ -1,4 +1,5 @@
 const { TruffleProvider } = require("@harmony-js/core");
+const HDWalletProvider = require("truffle-hdwallet-provider");
 
 const gasLimit = 3321900;
 const gasPrice = 1000000000;
@@ -10,7 +11,12 @@ module.exports = {
       host: "127.0.0.1",
       port: 7545,
     },
-    rinkbery: {
+    ropsten: {
+      network_id: 3,
+      provider: () => {
+        return new HDWalletProvider(process.ACCOUNT_MNEMORIC, process.ROPSTEN_URL)
+      },
+      gas: 4000000
     },
     testnet: {
       network_id: "2",

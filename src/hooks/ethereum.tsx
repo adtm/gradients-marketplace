@@ -5,16 +5,17 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import GradientTokenAbi from '../abi/GradientToken';
 import GradientMarketplaceAbi from '../abi/GradientMarketplace';
 
-const TokenContractAddress = '0x35Be040CA6CB7Ba6F2CEc5f73e5c05455e93b539'
-const MarketplaceContractAddress = '0x36327EB163A96d2231ac564A10Bacd19a23f565A'
-const ContractDeployerAddress = '0x229a04f2dcDc410C803F3cDa4c489A1Ce62A05b1'
+const TokenContractAddress = '0x72aa3f97b3Fadce17514512b626d8fB2beBeE6bD'
+const MarketplaceContractAddress = '0xe7dECA40AaB2fb6aF8ca5555a79C1956A2B2b905'
+const ContractDeployerAddress = '0x9c04aCdC92cdF7c6634d293c8aD2063Ce89dC4B6'
 
 
 const MAIN_CHAIN_ID = "1666700000"
 const TESTNET_CHAIN_ID = "1666600000"
 const LOCALHOST_CHAIN_ID = "1337"
+const ROPSTEN_CHAIN_ID = "3"
 
-const HARMONY_CHAIN_IDS = new Set([TESTNET_CHAIN_ID, MAIN_CHAIN_ID, LOCALHOST_CHAIN_ID])
+const HARMONY_CHAIN_IDS = new Set([TESTNET_CHAIN_ID, MAIN_CHAIN_ID, LOCALHOST_CHAIN_ID, ROPSTEN_CHAIN_ID])
 
 const useEthereumProvider = () => {
   const { ethereum } = window as any;

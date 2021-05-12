@@ -28,10 +28,14 @@ const Home = () => {
     ]
 
     for (let i = 0; i < gradients.length; i++) {
-      await tokenContract.methods.createGradient(gradients[i].left, gradients[i].right).send({
-        from: account,
-        gas: 1000000
-      });
+      try {
+        await tokenContract.methods.createGradient(gradients[i].left, gradients[i].right).send({
+          from: account,
+          gas: 1000000
+        });
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 
@@ -55,7 +59,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    // mintTokens()
+    mintTokens()
     getGradients()
   }, [])
 
