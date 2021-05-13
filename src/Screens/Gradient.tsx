@@ -16,6 +16,7 @@ const GradientScreen = () => {
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [buyLoading, setBuyLoading] = useState<boolean>(false);
 
   // @ts-ignore
   const [gradient, setGradient] = useState<Gradient>({});
@@ -46,12 +47,19 @@ const GradientScreen = () => {
   }
 
   const buyGradient = async () => {
-    await marketplaceContract.methods.buyGradient(id).send({
-      from: account,
-      value: new BN(gradient.price),
-      gas: 1000000
-    });
-    getGradient();
+    try {
+      setBuyLoading(true);
+      await marketplaceContract.methods.buyGradient(id).send({
+        from: account,
+        value: new BN(gradient.price),
+        gas: 1000000
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setBuyLoading(false);
+      getGradient();
+    }
   }
 
   useEffect(() => {
@@ -93,7 +101,7 @@ const GradientScreen = () => {
               </div>
             </div>
             <div className="pt-8 md:text-left text-center">
-              {gradient.forSale ? <BuyButton isOwner={gradient.owner.toLowerCase() === account?.toLowerCase()} price={Number(gradient.price)} buyGradient={buyGradient} /> : <DisabledBuyButton />}
+              {gradient.forSale ? <BuyButton buyLoading={buyLoading} isOwner={gradient.owner.toLowerCase() === account?.toLowerCase()} price={Number(gradient.price)} buyGradient={buyGradient} /> : <DisabledBuyButton />}
             </div>
           </div>
         </div>
