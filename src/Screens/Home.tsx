@@ -3,6 +3,7 @@ import { Transition } from '@headlessui/react';
 import { Link } from 'react-router-dom';
 
 import { Gradient } from '../types';
+import Loader from '../Loaders/Loader';
 import DisplayCard from '../Cards/DisplayCard';
 import { useEthereumProvider } from '../hooks/ethereum';
 
@@ -25,7 +26,7 @@ const Home = () => {
       { left: "#65799B", right: "#5E2563" },
       { left: "#184E68", right: "#57CA85" },
       { left: "#58247A", right: "#1BCEDF" },
-    ]
+    ];
 
     for (let i = 0; i < gradients.length; i++) {
       try {
@@ -64,6 +65,7 @@ const Home = () => {
   }, [])
 
   const renderNotConnectedMetamaskOrComponent = (component: React.ReactNode) => {
+    if (loading) return <Loader />
     if (!ethereum) return (
       <div className="text-center">
         <div

@@ -7,6 +7,7 @@ import SellableCard from '../Cards/SellableCard';
 import DisplayCard from '../Cards/DisplayCard';
 import { useEthereumProvider } from '../hooks/ethereum';
 import { shortenAddress } from '../utils/addressShortener';
+import Loader from '../Loaders/Loader';
 
 
 const Owner = () => {
@@ -67,6 +68,12 @@ const Owner = () => {
     getGradients()
   }, [])
 
+  const renderLoaderOrComponent = (component: React.ReactNode) => {
+    if (loading) return <Loader />
+
+    return component;
+  }
+
   const renderEmpty = () => {
     return <div className="m-5 text-center">
       <p>No gradients yet 🖼</p>
@@ -93,21 +100,23 @@ const Owner = () => {
   return (
     <div >
       <h1 className="text-xl text-center p-5 font-semibold">{shortenAddress(address)}</h1>
-      <Transition
-        show={!loading}
-        enter="transition-opacity duration-300"
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-        leave="transition-opacity duration-300"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-      >
-        <div className="container mx-auto">
-          <div className="flex flex-wrap flex-auto justify-center">
-            {gradients.length ? renderedCards() : renderEmpty()}
+      {
+        renderLoaderOrComponent(<Transition
+          show={!loading}
+          enter="transition-opacity duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-300"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="container mx-auto">
+            <div className="flex flex-wrap flex-auto justify-center">
+              {gradients.length ? renderedCards() : renderEmpty()}
+            </div>
           </div>
-        </div>
-      </Transition>
+        </Transition>)
+      }
     </div>
   )
 }
