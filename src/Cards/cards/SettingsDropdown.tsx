@@ -8,7 +8,7 @@ interface SettingsDropdownProps {
 }
 
 const SettingsDropdown = ({ id, onSale, onSetSale, onCancelSale, }: SettingsDropdownProps) => (
-  <Menu as="button" className="relative font-medium inline-block text-left">
+  <Menu as="div" className="relative font-medium inline-block text-left">
     {({ open }) => (
       <>
         <div>
@@ -35,25 +35,19 @@ const SettingsDropdown = ({ id, onSale, onSetSale, onCancelSale, }: SettingsDrop
             className="origin-top-right absolute right-0 mt-2 w-32 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
           >
             <div className="py-1">
-              <Menu.Item>
-                {() => (
-                  <div
-                    onClick={() => onSetSale()}
-                    className={`block px-4 py-2 text-sm text-gray-700`}
-                  >
-                    Put for Sale
-                  </div>
-                )}
+              <Menu.Item as="button" onClick={() => onSetSale()}>
+                <div
+                  className={`block px-4 py-2 text-sm text-gray-700 hover:text-gray-900`}
+                >
+                  Put for Sale
+                </div>
               </Menu.Item>
-              <Menu.Item disabled={onSale}>
-                {() => (
-                  <div
-                    onClick={() => onCancelSale(id)}
-                    className={`block px-4 py-2 text-sm ${!onSale ? "cursor-not-allowed text-gray-300" : "text-gray-700 "}`}
-                  >
-                    Cancel Sale
+              <Menu.Item as="button" disabled={onSale} onClick={() => onCancelSale(id)}>
+                <div
+                  className={`block px-4 py-2 text-sm hover:text-gray-900 ${!onSale ? "cursor-not-allowed text-gray-300" : "text-gray-700 "}`}
+                >
+                  Cancel Sale
                   </div>
-                )}
               </Menu.Item>
             </div>
           </Menu.Items>
