@@ -10,7 +10,7 @@ const Home = () => {
 
   const [gradients, setGradients] = useState<Gradient[]>([]);
   const [loading, setLoading] = useState(true);
-  const { account, contracts: { tokenContract, marketplaceContract } } = useEthereumProvider()
+  const { account, ethereum, contracts: { tokenContract, marketplaceContract } } = useEthereumProvider()
 
   // @NOTE: only for development purposes
   const mintTokens = async () => {
@@ -47,11 +47,11 @@ const Home = () => {
       for (let id = 0; id < totalSupply; id++) {
         const { left, right, owner } = await tokenContract.methods.getGradient(id).call();
         const { price, forSale } = await marketplaceContract.methods.sellTransactionByTokenId(id).call();
-  
+
         const gradient: Gradient = { id: id.toString(), left, right, owner, price, forSale }
         fetchedGradients.push(gradient)
       }
-  
+
       setGradients(fetchedGradients);
     } finally {
       setLoading(false);
@@ -63,25 +63,43 @@ const Home = () => {
     getGradients()
   }, [])
 
+  const renderNotConnectedMetamaskOrComponent = (component: React.ReactNode) => {
+    if (!ethereum) return (
+      <div className="text-center">
+        <div
+          className="inline-block h-10 w-10 rounded-full ring-offset-2 hover:ring-2 ring-green-300 mb-5"
+          style={{ background: `linear-gradient(135deg, #17EAD9 0%, #6078EA 100%)` }}
+        />
+        <p className="font-semibold text-md">You will need Metamask to use the website </p>
+      </div>
+    )
+
+    return component;
+  }
+
   return (
     <div className="container mx-auto">
-      <Transition
-        show={!loading}
-        enter="transition-opacity duration-300"
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-        leave="transition-opacity duration-300"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-      >
-        <div className="flex flex-wrap flex-auto justify-center">
-          {gradients.map(gradient => (
-            <Link key={gradient.id} to={`/gradient/${gradient.id}`}>
-              <DisplayCard gradient={gradient} />
-            </Link>
-          ))}
-        </div>
-      </Transition>
+      {
+        renderNotConnectedMetamaskOrComponent(
+          <Transition
+            show={!loading}
+            enter="transition-opacity duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="flex flex-wrap flex-auto justify-center">
+              {gradients.map(gradient => (
+                <Link key={gradient.id} to={`/gradient/${gradient.id}`}>
+                  <DisplayCard gradient={gradient} />
+                </Link>
+              ))}
+            </div>
+          </Transition>
+        )
+      }
     </div>
   )
 }

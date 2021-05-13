@@ -38,6 +38,15 @@ const useEthereumProvider = () => {
     _connect();
   }, [])
 
+  const openMetamask = async () => {
+    try {
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      _handleAccountsChanged(accounts);
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
   const _connect = async () => {
     const provider = await detectEthereumProvider();
     if (provider) {
@@ -90,7 +99,8 @@ const useEthereumProvider = () => {
     },
     addresses: {
       MarketplaceContractAddress
-    }
+    },
+    openMetamask
   }
 }
 
