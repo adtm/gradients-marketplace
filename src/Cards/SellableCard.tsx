@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { shortenAddress } from '../utils/addressShortener'
 
 import { Gradient } from '../types';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import SaleButton from './cards/SaleButton';
 import BackgroundTip from './cards/BackgroundTip';
@@ -54,10 +54,7 @@ const SellableCard = ({ gradient, sellLoading, onCancelButton, onSellButton }: O
         <div className="px-4 py-4">
           <h3 className="text-md font-semibold pb-2 break-all">{gradient.left} - {gradient.right}</h3>
           <h4 className="text-xs ">of{" "}
-            <button className="hover:text-blue-500" onClick={(event) => {
-              event.stopPropagation();
-              navigate(`/owner/${gradient.owner}`)
-            }}>
+            <button className="hover:text-blue-500" onClick={() => navigate(`/owner/${gradient.owner}`)}>
               @{shortenAddress(gradient.owner)}
             </button>
           </h4>

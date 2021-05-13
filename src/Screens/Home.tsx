@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Transition } from '@headlessui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Gradient } from '../types';
 import Loader from '../Loaders/Loader';
@@ -9,6 +9,7 @@ import { useEthereumProvider } from '../hooks/ethereum';
 
 const Home = () => {
 
+  const navigate = useNavigate();
   const [gradients, setGradients] = useState<Gradient[]>([]);
   const [loading, setLoading] = useState(true);
   const { account, ethereum, contracts: { tokenContract, marketplaceContract } } = useEthereumProvider()
@@ -94,9 +95,9 @@ const Home = () => {
           >
             <div className="flex flex-wrap flex-auto justify-center">
               {gradients.map(gradient => (
-                <Link key={gradient.id} to={`/gradient/${gradient.id}`}>
+                <a className="cursor-pointer" key={gradient.id} onClick={() => navigate(`/gradient/${gradient.id}`)}>
                   <DisplayCard gradient={gradient} />
-                </Link>
+                </a>
               ))}
             </div>
           </Transition>
