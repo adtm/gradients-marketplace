@@ -10,10 +10,10 @@ interface BuyButtonProps {
 
 const BuyButton = ({ isOwner, price, buyGradient }: BuyButtonProps) => {
 
-  const { ethereum, account } = useEthereumProvider();
+  const { openMetamask, account } = useEthereumProvider();
 
   const NotConnectedButton = () => (
-    <button onClick={ethereum.enable} className="md:w-auto w-full my-3 px-20 py-3 font-semibold rounded-lg shadow-md text-white bg-black hover:bg-gray-700">
+    <button onClick={() => openMetamask()} className="md:w-auto w-full my-3 px-20 py-3 font-semibold rounded-lg shadow-md text-white bg-black hover:bg-gray-700">
       Connect Metamask
     </button>
   )

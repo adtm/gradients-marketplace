@@ -67,7 +67,7 @@ const Home = () => {
     if (!ethereum) return (
       <div className="text-center">
         <div
-          className="inline-block h-10 w-10 rounded-full ring-offset-2 hover:ring-2 ring-green-300 mb-5"
+          className="inline-block h-10 w-10 rounded-full mb-5"
           style={{ background: `linear-gradient(135deg, #17EAD9 0%, #6078EA 100%)` }}
         />
         <p className="font-semibold text-md">You will need Metamask to use the website </p>
