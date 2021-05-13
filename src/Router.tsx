@@ -1,7 +1,7 @@
 import React from "react";
 import {
   BrowserRouter,
-  Switch,
+  Routes,
   Route
 } from "react-router-dom";
 
@@ -14,17 +14,17 @@ const Router = () => (
   <BrowserRouter>
     <Navigation />
     <div className="md:mx-10 md:my-10 sm:mx-10 sm:my-10 my-5 mx-5">
-      <Switch>
-        <Route path="/gradient/:id" sensitive strict>
+      <Routes>
+        <Route path="/gradient/:id">
           <GradientScreen />
         </Route>
-        <Route path="/owner/:address" sensitive strict>
+        <Route path="/owner/:address">
           <Artist />
         </Route>
         <Route path="/" >
           <Home />
         </Route>
-      </Switch>
+      </Routes>
     </div>
   </BrowserRouter>
 );

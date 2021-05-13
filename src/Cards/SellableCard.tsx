@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { shortenAddress } from '../utils/addressShortener'
 
 import { Gradient } from '../types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import SaleButton from './cards/SaleButton';
 import BackgroundTip from './cards/BackgroundTip';
@@ -22,6 +22,7 @@ interface OwnerGradientCardProps {
 
 const SellableCard = ({ gradient, sellLoading, onCancelButton, onSellButton }: OwnerGradientCardProps) => {
 
+  const navigate = useNavigate();
   const gradientBg = gradientBackground({ left: gradient.left, right: gradient.right })
 
   const [open, setOpen] = useState(false);
@@ -53,9 +54,12 @@ const SellableCard = ({ gradient, sellLoading, onCancelButton, onSellButton }: O
         <div className="px-4 py-4">
           <h3 className="text-md font-semibold pb-2 break-all">{gradient.left} - {gradient.right}</h3>
           <h4 className="text-xs ">of{" "}
-            <Link className="hover:text-blue-500" to={`/owner/${gradient.owner}`}>
+            <button className="hover:text-blue-500" onClick={(event) => {
+              event.stopPropagation();
+              navigate(`/owner/${gradient.owner}`)
+            }}>
               @{shortenAddress(gradient.owner)}
-            </Link>
+            </button>
           </h4>
         </div>
         {gradient.forSale ? <SaleButton price={Number(gradient.price)} /> : <BackgroundTip gradientBackground={gradientBg} />}

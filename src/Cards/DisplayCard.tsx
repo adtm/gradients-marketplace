@@ -24,7 +24,7 @@ const DisplayCard = ({ gradient }: CardProps) => {
         <div className="px-4 py-4">
           <h3 className="text-md font-semibold pb-2 break-all">{gradient.left} - {gradient.right}</h3>
           <h4 className="text-xs">of{" "}
-            <Link  className="hover:text-blue-500" to={`/owner/${gradient.owner}`}>
+            <Link className="hover:text-blue-500" to={`/owner/${gradient.owner}`}>
               @{shortenAddress(gradient.owner)}
             </Link>
           </h4>

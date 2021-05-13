@@ -14,7 +14,7 @@ import DisabledBuyButton from '../Gradient/DisabledBuyButton';
 
 const GradientScreen = () => {
 
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [buyLoading, setBuyLoading] = useState<boolean>(false);
 

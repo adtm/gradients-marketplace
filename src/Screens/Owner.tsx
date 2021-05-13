@@ -11,7 +11,7 @@ import Loader from '../Loaders/Loader';
 
 
 const Owner = () => {
-  const { address } = useParams<{ address: string }>();
+  const { address } = useParams();
 
   const { web3, account, contracts: { tokenContract, marketplaceContract }, addresses: { MarketplaceContractAddress } } = useEthereumProvider()
   const isOwner = account ? address.toLowerCase() === account.toLowerCase() : false;
