@@ -20,8 +20,6 @@ const BuyButton = ({ isOwner, buyLoading, price, buyGradient }: BuyButtonProps) 
     </button>
   )
 
-
-
   const OwnerSellableButton = () => (
     <button disabled className="md:w-auto w-full my-3 px-20 py-3 font-semibold rounded-lg shadow-md text-white bg-black bg-gray-700 cursor-not-allowed">
       Yours

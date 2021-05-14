@@ -32,7 +32,7 @@ const SellableCard = ({ gradient, sellLoading, onCancelButton, onSellButton }: O
     <div className="m-3 relative">
       <div
         style={gradientBg}
-        className="rounded-md rounded-b-none h-96 xs:w-72 w-80 sm:w-96"
+        className="rounded-md rounded-b-none xs:w-72 w-80 sm:w-72 h-80"
       >
         {
           sellLoading ? (
