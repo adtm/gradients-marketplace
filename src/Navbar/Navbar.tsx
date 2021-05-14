@@ -59,7 +59,7 @@ export default function Navbar() {
               </div>
             </div>
           </div>
-          <MobilePanel />
+          <MobilePanel account={account} />
         </>
       )}
     </Disclosure>
@@ -79,9 +79,17 @@ const MobileMenuButton = ({ open }: { open: boolean }) => (
   </div>
 )
 
-const MobilePanel = () => (
+const MobilePanel = ({ account }: { account: null | string }) => (
   <Disclosure.Panel className="sm:hidden">
-    <div className="px-2 pt-2 pb-3 space-y-2">
+    <div className="px-2 pt-2 pb-3 space-y-2 flex flex-col justify-items items-center">
+      {
+        account ? <Link to={`/owner/${account}`} className="mb-1 h-10 w-10 ">
+          <div
+            className={`inline-block h-10 w-10 rounded-full ring-offset-2 hover:ring-2 ring-green-300`}
+            style={{ background: `linear-gradient(135deg, #17EAD9 0%, #6078EA 100%)` }}
+          />
+        </Link> : null
+      }
       <NetworkButton />
     </div>
   </Disclosure.Panel>

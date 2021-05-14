@@ -80,7 +80,7 @@ const GradientScreen = () => {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div className="md:flex mt-40">
+        <div className="md:flex mt-10 sm:mt-40">
           <div className="flex flex-grow items-center justify-center">
             <div
               style={gradientBg}
@@ -89,7 +89,7 @@ const GradientScreen = () => {
           </div>
           <div className="md:flex-1">
             <div className="pb-2 pt-5">
-              <h1 className="text-4xl font-bold">{gradient.left} - {gradient.right}</h1>
+              <h1 className="text-2xl sm:text-4xl font-bold">{gradient.left} - {gradient.right}</h1>
             </div>
             <div className="pb-3">
               <div className="flex items-center">
