@@ -1,14 +1,10 @@
 import Web3 from 'web3';
+import { AbiItem } from 'web3-utils'
 import { useState, useEffect } from 'react'
 import detectEthereumProvider from '@metamask/detect-provider';
 
-import GradientTokenAbi from '../abi/GradientToken';
-import GradientMarketplaceAbi from '../abi/GradientMarketplace';
-
-const TokenContractAddress = '0x72aa3f97b3Fadce17514512b626d8fB2beBeE6bD'
-const MarketplaceContractAddress = '0xe7dECA40AaB2fb6aF8ca5555a79C1956A2B2b905'
-const ContractDeployerAddress = '0x9c04aCdC92cdF7c6634d293c8aD2063Ce89dC4B6'
-
+import GradientTokenAbi from '../../abi/GradientToken.json';
+import GradientMarketplaceAbi from '../../abi/GradientMarketplace.json';
 
 const MAIN_CHAIN_ID = "1666700000"
 const TESTNET_CHAIN_ID = "1666600000"
@@ -21,14 +17,12 @@ const useEthereumProvider = () => {
   const { ethereum } = window as any;
   const web3 = new Web3(Web3.givenProvider);
 
-  // @ts-ignore
-  const tokenContract = new web3.eth.Contract(GradientTokenAbi, TokenContractAddress, {
-    from: ContractDeployerAddress,
+  const tokenContract = new web3.eth.Contract(GradientTokenAbi as AbiItem[], process.env.GRADIENT_TOKEN_ADDRESS, {
+    from: process.env.GRADIENT_DEPLOYER_ADDRESS,
   });
 
-  // @ts-ignore
-  const marketplaceContract = new web3.eth.Contract(GradientMarketplaceAbi, MarketplaceContractAddress, {
-    from: ContractDeployerAddress,
+  const marketplaceContract = new web3.eth.Contract(GradientMarketplaceAbi as AbiItem[], process.env.GRADIENT_MARKETPLACE_ADDRESS, {
+    from: process.env.GRADIENT_DEPLOYER_ADDRESS,
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +36,7 @@ const useEthereumProvider = () => {
     try {
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       _handleAccountsChanged(accounts);
-    } catch(err) {
+    } catch (err) {
       console.error(err);
     }
   }
@@ -63,13 +57,13 @@ const useEthereumProvider = () => {
     try {
       const chainId = await ethereum.request({ method: 'eth_chainId' });
       _handleChainIdChanged(chainId);
-  
+
       const isWalletUnlocked = await ethereum._metamask.isUnlocked()
       if (isWalletUnlocked) {
         const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
         _handleAccountsChanged(accounts);
       }
-  
+
       ethereum.on('accountsChanged', _handleAccountsChanged)
       ethereum.on('chainChanged', _handleChainIdChanged);
     } catch (err) {
@@ -95,13 +89,10 @@ const useEthereumProvider = () => {
   }
 
   return {
-    error, account, ethereum, web3, 
+    error, account, ethereum, web3,
     contracts: {
       tokenContract,
       marketplaceContract
-    },
-    addresses: {
-      MarketplaceContractAddress
     },
     openMetamask
   }

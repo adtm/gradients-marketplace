@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Transition } from '@headlessui/react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Gradient } from '../types';
 import Loader from '../Loaders/Loader';
@@ -12,7 +12,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [gradients, setGradients] = useState<Gradient[]>([]);
   const [loading, setLoading] = useState(true);
-  const { account, ethereum, contracts: { tokenContract, marketplaceContract } } = useEthereumProvider()
+  const { account, ethereum, contracts: { tokenContract } } = useEthereumProvider()
 
   // @NOTE: only for development purposes
   const mintTokens = async () => {
@@ -43,18 +43,11 @@ const Home = () => {
 
   const getGradients = async () => {
     try {
-      const totalSupply = await tokenContract.methods.totalSupply().call();
+      const url = `/.netlify/functions/get-all-gradients`;
+      const response = await fetch(url);
+      const result = await response.json();
 
-      const fetchedGradients = []
-      for (let id = 0; id < totalSupply; id++) {
-        const { left, right, owner } = await tokenContract.methods.getGradient(id).call();
-        const { price, forSale } = await marketplaceContract.methods.sellTransactionByTokenId(id).call();
-
-        const gradient: Gradient = { id: id.toString(), left, right, owner, price, forSale }
-        fetchedGradients.push(gradient)
-      }
-
-      setGradients(fetchedGradients);
+      setGradients(result);
     } finally {
       setLoading(false);
     }
@@ -67,16 +60,6 @@ const Home = () => {
 
   const renderNotConnectedMetamaskOrComponent = (component: React.ReactNode) => {
     if (loading) return <Loader />
-    if (!ethereum) return (
-      <div className="text-center">
-        <div
-          className="inline-block h-10 w-10 rounded-full mb-5"
-          style={{ background: `linear-gradient(135deg, #17EAD9 0%, #6078EA 100%)` }}
-        />
-        <p className="font-semibold text-md">You will need Metamask to use the website </p>
-      </div>
-    )
-
     return component;
   }
 

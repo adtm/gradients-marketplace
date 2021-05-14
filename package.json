@@ -4,11 +4,13 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.1.1",
+    "@ethersproject/providers": "^5.1.2",
     "@harmony-js/core": "^0.1.57",
     "@harmony-js/utils": "^0.1.56",
     "@headlessui/react": "^1.0.0",
     "@heroicons/react": "^1.0.1",
     "@metamask/detect-provider": "^1.2.0",
+    "@netlify/functions": "^0.7.2",
     "@openzeppelin/contracts": "^4.0.0",
     "@tailwindcss/forms": "^0.3.2",
     "@testing-library/jest-dom": "^5.11.10",
@@ -22,9 +24,12 @@
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
     "@web3-react/types": "^6.0.7",
+    "axios": "^0.21.1",
     "bn.js": "^5.2.0",
+    "electron": "^12.0.7",
     "faker": "^5.5.3",
     "formik": "^2.2.6",
+    "history": "^5.0.0",
     "openzeppelin-solidity": "^4.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -40,8 +45,10 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "truffle test",
+    "test": "craco test",
+    "truffle:test": "truffle compile",
     "truffle:compile": "truffle compile",
+    "server:dev": "netlify dev",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

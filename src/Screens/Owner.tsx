@@ -13,32 +13,24 @@ import Loader from '../Loaders/Loader';
 const Owner = () => {
   const { address } = useParams();
 
-  const { web3, account, contracts: { tokenContract, marketplaceContract }, addresses: { MarketplaceContractAddress } } = useEthereumProvider()
+  const { web3, account, contracts: { tokenContract, marketplaceContract } } = useEthereumProvider()
   const isOwner = account ? address.toLowerCase() === account.toLowerCase() : false;
 
   const [loading, setLoading] = useState(true);
-  const [saleLoading, setSaleLoading] = useState<string|null>(null);
+  const [saleLoading, setSaleLoading] = useState<string | null>(null);
   const [gradients, setGradients] = useState<Gradient[]>([]);
 
   const getGradients = async () => {
     try {
-      const fetchedGradients = []
       const isValidAddress = web3.utils.isAddress(address);
 
       if (isValidAddress) {
-        const ownerSupply = await tokenContract.methods.balanceOf(address).call();
+        const url = `/.netlify/functions/get-owner-gradients?address=${address}`;
 
-        for (let count = 0; count < ownerSupply; count++) {
-          const id = await tokenContract.methods.tokenOfOwnerByIndex(address, count).call();
-          const { left, right, owner } = await tokenContract.methods.getGradient(id).call();
-          const { price, forSale } = await marketplaceContract.methods.sellTransactionByTokenId(id).call();
-
-          const gradient = { id, left, right, owner, price, forSale }
-          fetchedGradients.push(gradient)
-        }
+        const response = await fetch(url);
+        const result = await response.json();
+        setGradients(result);
       }
-
-      setGradients(fetchedGradients);
     } catch (err) {
       console.error(err);
     } finally {
@@ -49,7 +41,7 @@ const Owner = () => {
   const setForSale = async (id: string, price: string) => {
     try {
       setSaleLoading(id);
-      await tokenContract.methods.approve(MarketplaceContractAddress, id).send({
+      await tokenContract.methods.approve(process.env.GRADIENT_MARKETPLACE_ADDRESS, id).send({
         from: address,
       });
       await marketplaceContract.methods.sellGradient(id, price).send({
