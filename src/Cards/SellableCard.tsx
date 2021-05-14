@@ -10,23 +10,55 @@ import PreviewButton from './cards/PreviewButton';
 import SettingsDropdown from './cards/SettingsDropdown';
 import SellModal from '../Gradient/ListingModal';
 import { gradientBackground } from '../utils/gradientBackground';
+import { useEthereumProvider } from '../hooks/ethereum';
 
 
 interface OwnerGradientCardProps {
   gradient: Gradient;
-  sellLoading: boolean;
-  onCancelButton: (id: string) => void;
-  onSellButton: (id: string, price: string) => void;
+  getGradients: () => void;
 }
 
 
-const SellableCard = ({ gradient, sellLoading, onCancelButton, onSellButton }: OwnerGradientCardProps) => {
+const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
 
   const navigate = useNavigate();
+
+
   const gradientBg = gradientBackground({ left: gradient.left, right: gradient.right })
+  const { account, contracts: { tokenContract, marketplaceContract } } = useEthereumProvider()
 
   const [open, setOpen] = useState(false);
+  const [saleLoading, setSaleLoading] = useState<boolean>(false);
   const cancelButtonRef = useRef()
+
+  const setForSale = async (id: string, price: string) => {
+    try {
+      setSaleLoading(true);
+      await tokenContract.methods.approve(process.env.REACT_APP_GRADIENT_MARKETPLACE_ADDRESS, id).send({
+        from: account,
+      });
+      await marketplaceContract.methods.sellGradient(id, price).send({
+        from: account,
+        gas: 200000
+      });
+      await getGradients()
+    } finally {
+      setSaleLoading(false);
+    }
+  }
+
+  const cancelSale = async (id: string) => {
+    try {
+      setSaleLoading(true);
+      await marketplaceContract.methods.cancelSellGradient(id).send({
+        from: account,
+        gas: 200000
+      });
+      await getGradients()
+    } finally {
+      setSaleLoading(false);
+    }
+  }
 
   return (
     <div className="m-3 relative">
@@ -35,7 +67,7 @@ const SellableCard = ({ gradient, sellLoading, onCancelButton, onSellButton }: O
         className="rounded-md rounded-b-none xs:w-72 w-80 sm:w-72 h-80"
       >
         {
-          sellLoading ? (
+          saleLoading ? (
             <div className="rounded-md rounded-b-none xs:w-72 w-80 sm:w-72 h-80 bg-gray-300 bg-opacity-80 flex justify-center items-center">
               <svg className="animate-spin -ml-1 mr-3 h-7 w-7 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -46,10 +78,10 @@ const SellableCard = ({ gradient, sellLoading, onCancelButton, onSellButton }: O
         }
       </div>
       <div className="absolute top-0 right-0 m-2 space-x-2">
-        <SettingsDropdown onSale={gradient.forSale} id={gradient.id} onCancelSale={onCancelButton} onSetSale={() => setOpen(true)} />
+        <SettingsDropdown onSale={gradient.forSale} id={gradient.id} onCancelSale={cancelSale} onSetSale={() => setOpen(true)} />
         <PreviewButton id={gradient.id} />
       </div>
-      <SellModal id={gradient.id} open={open} cancelButtonRef={cancelButtonRef} setOpen={setOpen} onClickSell={onSellButton} />
+      <SellModal id={gradient.id} open={open} cancelButtonRef={cancelButtonRef} setOpen={setOpen} onClickSell={setForSale} />
       <div className="shadow-md rounded-t-none rounded-md">
         <div className="px-4 py-4">
           <h3 className="text-md font-semibold pb-2 break-all">{gradient.left} - {gradient.right}</h3>
