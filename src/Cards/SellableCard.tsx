@@ -29,10 +29,10 @@ const SellableCard = ({ gradient, sellLoading, onCancelButton, onSellButton }: O
   const cancelButtonRef = useRef()
 
   return (
-    <div className="sm:w-56 m-3 relative">
+    <div className="m-3 relative">
       <div
         style={gradientBg}
-        className="rounded-md rounded-b-none h-96 w-96 sm:w-56 sm:h-56"
+        className="rounded-md rounded-b-none h-96 xs:w-72 w-80 sm:w-96"
       >
         {
           sellLoading ? (

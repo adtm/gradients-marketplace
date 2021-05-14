@@ -16,10 +16,10 @@ const DisplayCard = ({ gradient }: CardProps) => {
   const gradientBg = gradientBackground({ left: gradient.left, right: gradient.right })
 
   return (
-    <div className="sm:w-56 m-3 hover:shadow-xl">
+    <div className="m-3 hover:shadow-xl">
       <div
         style={gradientBg}
-        className="rounded-md rounded-b-none h-96 w-96 sm:w-56 sm:h-56"
+        className="rounded-md rounded-b-none h-96 xs:w-72 w-80 sm:w-96"
       />
       <div className="shadow-md rounded-t-none rounded-md">
         <div className="px-4 py-4">
