@@ -85,9 +85,9 @@ const Home = () => {
           >
             <div className="flex flex-wrap flex-auto justify-center">
               {gradients.map(gradient => (
-                // <a className="cursor-pointer" key={gradient.id} onClick={() => navigate(`/gradient/${gradient.id}`)}>
+                <a className="cursor-pointer" key={gradient.id} onClick={() => navigate(`/gradient/${gradient.id}`)}>
                   <DisplayCard gradient={gradient} />
-                // </a>
+                </a>
               ))}
             </div>
           </Transition>
