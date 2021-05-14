@@ -11,12 +11,13 @@ import Loader from '../Loaders/Loader';
 
 
 const Owner = () => {
-  const { address } = useParams<{ address: string }>();
+  const { address } = useParams();
 
   const { web3, account, contracts: { tokenContract, marketplaceContract }, addresses: { MarketplaceContractAddress } } = useEthereumProvider()
   const isOwner = account ? address.toLowerCase() === account.toLowerCase() : false;
 
   const [loading, setLoading] = useState(true);
+  const [saleLoading, setSaleLoading] = useState<string|null>(null);
   const [gradients, setGradients] = useState<Gradient[]>([]);
 
   const getGradients = async () => {
@@ -46,22 +47,32 @@ const Owner = () => {
   }
 
   const setForSale = async (id: string, price: string) => {
-    await tokenContract.methods.approve(MarketplaceContractAddress, id).send({
-      from: address,
-    });
-    await marketplaceContract.methods.sellGradient(id, price).send({
-      from: address,
-      gas: 200000
-    });
-    await getGradients()
+    try {
+      setSaleLoading(id);
+      await tokenContract.methods.approve(MarketplaceContractAddress, id).send({
+        from: address,
+      });
+      await marketplaceContract.methods.sellGradient(id, price).send({
+        from: address,
+        gas: 200000
+      });
+      await getGradients()
+    } finally {
+      setSaleLoading(null);
+    }
   }
 
   const cancelSale = async (id: string) => {
-    await marketplaceContract.methods.cancelSellGradient(id).send({
-      from: address,
-      gas: 200000
-    });
-    await getGradients()
+    try {
+      setSaleLoading(id);
+      await marketplaceContract.methods.cancelSellGradient(id).send({
+        from: address,
+        gas: 200000
+      });
+      await getGradients()
+    } finally {
+      setSaleLoading(null);
+    }
   }
 
   useEffect(() => {
@@ -70,7 +81,6 @@ const Owner = () => {
 
   const renderLoaderOrComponent = (component: React.ReactNode) => {
     if (loading) return <Loader />
-
     return component;
   }
 
@@ -89,7 +99,7 @@ const Owner = () => {
   }
 
   const renderedCards = () => {
-    if (isOwner) return gradients.map(gradient => <SellableCard key={gradient.id} gradient={gradient} onCancelButton={cancelSale} onSellButton={setForSale} />)
+    if (isOwner) return gradients.map(gradient => <SellableCard sellLoading={saleLoading == gradient.id} key={gradient.id} gradient={gradient} onCancelButton={cancelSale} onSellButton={setForSale} />)
     return gradients.map(gradient => (
       <Link key={gradient.id} to={`/gradient/${gradient.id}`}>
         <DisplayCard gradient={gradient} />
