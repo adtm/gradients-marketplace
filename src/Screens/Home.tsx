@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Transition } from '@headlessui/react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Gradient } from '../types';
 import Loader from '../Loaders/Loader';
@@ -12,7 +12,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [gradients, setGradients] = useState<Gradient[]>([]);
   const [loading, setLoading] = useState(true);
-  const { account, ethereum, contracts: { tokenContract } } = useEthereumProvider()
+  const { account, contracts: { tokenContract, marketplaceContract } } = useEthereumProvider()
 
   // @NOTE: only for development purposes
   const mintTokens = async () => {
@@ -43,11 +43,18 @@ const Home = () => {
 
   const getGradients = async () => {
     try {
-      const url = `/.netlify/functions/get-all-gradients`;
-      const response = await fetch(url);
-      const result = await response.json();
+      const totalSupply = await tokenContract.methods.totalSupply().call();
 
-      setGradients(result);
+      const fetchedGradients = []
+      for (let id = 0; id < totalSupply; id++) {
+        const { left, right, owner } = await tokenContract.methods.getGradient(id).call();
+        const { price, forSale } = await marketplaceContract.methods.sellTransactionByTokenId(id).call();
+
+        const gradient: Gradient = { id: id.toString(), left, right, owner, price, forSale }
+        fetchedGradients.push(gradient)
+      }
+
+      setGradients(fetchedGradients);
     } finally {
       setLoading(false);
     }

@@ -1,10 +1,10 @@
-import Web3 from 'web3';
+import { getWeb3 } from './web3';
 import { AbiItem } from 'web3-utils'
 import { useState, useEffect } from 'react'
 import detectEthereumProvider from '@metamask/detect-provider';
 
-import GradientTokenAbi from '../../abi/GradientToken.json';
-import GradientMarketplaceAbi from '../../abi/GradientMarketplace.json';
+import GradientTokenAbi from '../abi/GradientToken.json';
+import GradientMarketplaceAbi from '../abi/GradientMarketplace.json';
 
 const MAIN_CHAIN_ID = "1666700000"
 const TESTNET_CHAIN_ID = "1666600000"
@@ -15,14 +15,14 @@ const HARMONY_CHAIN_IDS = new Set([TESTNET_CHAIN_ID, MAIN_CHAIN_ID, LOCALHOST_CH
 
 const useEthereumProvider = () => {
   const { ethereum } = window as any;
-  const web3 = new Web3(Web3.givenProvider);
+  const web3 = getWeb3()
 
-  const tokenContract = new web3.eth.Contract(GradientTokenAbi as AbiItem[], process.env.GRADIENT_TOKEN_ADDRESS, {
-    from: process.env.GRADIENT_DEPLOYER_ADDRESS,
+  const tokenContract = new web3.eth.Contract(GradientTokenAbi as AbiItem[], process.env.REACT_APP_GRADIENT_TOKEN_ADDRESS, {
+    from: process.env.REACT_APP_GRADIENT_DEPLOYER_ADDRESS,
   });
 
-  const marketplaceContract = new web3.eth.Contract(GradientMarketplaceAbi as AbiItem[], process.env.GRADIENT_MARKETPLACE_ADDRESS, {
-    from: process.env.GRADIENT_DEPLOYER_ADDRESS,
+  const marketplaceContract = new web3.eth.Contract(GradientMarketplaceAbi as AbiItem[], process.env.REACT_APP_GRADIENT_MARKETPLACE_ADDRESS, {
+    from: process.env.REACT_APP_GRADIENT_DEPLOYER_ADDRESS,
   });
 
   const [error, setError] = useState<string | null>(null);
