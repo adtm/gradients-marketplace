@@ -72,7 +72,6 @@ const Home = () => {
 
   return (
     <div className="container mx-auto">
-
       <div className="text-center pb-10 mx-auto ">
         <h1 className="tracking-tight font-extrabold text-gray-900 dark:text-white text-5xl md:text-6xl">
           Gradients for the
@@ -81,6 +80,9 @@ const Home = () => {
           inner artist
         </h1>
         <p className="text-xs italic text-black dark:text-white">on blockchain</p>
+        <svg xmlns="http://www.w3.org/2000/svg" className="animate-bounce mx-auto mt-7 text-black dark:text-white h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 17l-4 4m0 0l-4-4m4 4V3" />
+        </svg>
       </div>
 
       {
