@@ -57,11 +57,11 @@ const Owner = () => {
 
   const renderEmpty = () => {
     return <div className="m-5 text-center">
-      <p>No gradients yet 🖼</p>
+      <p className="dark:text-white text-black ">No gradients yet 🖼</p>
       <Link to="/">
         <button
           type="button"
-          className="m-4 px-5 py-3 border rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="m-4 px-5 py-3 border rounded-md shadow-sm text-sm font-medium text-white dark:text-black bg-black dark:bg-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Acquire Gradients
         </button>
@@ -80,7 +80,7 @@ const Owner = () => {
 
   return (
     <div >
-      <h1 className="text-xl text-center p-5 font-semibold">{shortenAddress(address)}</h1>
+      <h1 className="text-black dark:text-white text-xl text-center p-5 font-semibold">{shortenAddress(address)}</h1>
       {
         renderLoaderOrComponent(<Transition
           show={!loading}

@@ -80,7 +80,7 @@ const GradientScreen = () => {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div className="md:flex mt-10 sm:mt-40">
+        <div className="md:flex mt-10 sm:mt-40 text-black dark:text-white">
           <div className="flex flex-grow items-center justify-center">
             <div
               style={gradientBg}

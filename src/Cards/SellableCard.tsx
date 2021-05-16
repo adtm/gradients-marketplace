@@ -61,7 +61,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
   }
 
   return (
-    <div className="m-3 relative">
+    <div className="m-3 relative bg-white dark:bg-gray-800">
       <div
         style={gradientBg}
         className="rounded-md rounded-b-none xs:w-72 w-80 sm:w-72 h-80"
@@ -82,7 +82,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         <PreviewButton id={gradient.id} />
       </div>
       <SellModal id={gradient.id} open={open} cancelButtonRef={cancelButtonRef} setOpen={setOpen} onClickSell={setForSale} />
-      <div className="shadow-md rounded-t-none rounded-md">
+      <div className="shadow-md rounded-t-none rounded-md dark:text-white text-black">
         <div className="px-4 py-4">
           <h3 className="text-md font-semibold pb-2 break-all">{gradient.left} - {gradient.right}</h3>
           <h4 className="text-xs ">of{" "}

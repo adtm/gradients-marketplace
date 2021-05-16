@@ -4,6 +4,7 @@ import { Disclosure } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { useEthereumProvider } from '../hooks/ethereum'
 import { shortenAddress } from '../utils/addressShortener'
+import useDarkMode from '../hooks/darkMode'
 
 const NetworkButton = () => {
   const { error, account, openMetamask } = useEthereumProvider()
@@ -29,6 +30,7 @@ const NetworkButton = () => {
 
 export default function Navbar() {
   const { account } = useEthereumProvider();
+  const { darkMode, toggle } = useDarkMode();
 
   return (
     <Disclosure as="nav" >
@@ -39,12 +41,25 @@ export default function Navbar() {
               <MobileMenuButton open={open} />
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
+
                   <Link to="/">
-                    <h1 className="font-bold text-2xl">ichi<span className="text-red-500">.</span></h1>
+                    <h1 className="font-bold text-2xl text-black dark:text-white">ichi<span className="text-red-500">.</span></h1>
                   </Link>
+                  <button onClick={toggle} className="ml-10 flex p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2 text-black dark:text-white ">
+                    {
+                      !darkMode ?
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                        : <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    }
+                  </button>
                 </div>
                 <div className="hidden sm:flex sm:ml-10 w-full justify-end">
                   <div className="space-x-5 flex items-center justify-content">
+
                     {
                       account ? <Link to={`/owner/${account}`} className="p-0 m-0 h-10 w-10 ">
                         <div

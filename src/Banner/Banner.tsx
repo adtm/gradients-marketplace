@@ -16,11 +16,11 @@ const Banner = () => {
       leaveFrom="transform opacity-100"
       leaveTo="transform opacity-0"
     >
-      <div className="bg-indigo-600">
+      <div className="bg-gradient-to-r from-green-400 to-blue-500">
         <div className="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between flex-wrap">
             <div className="w-0 flex-1 flex items-center">
-              <span className="flex p-2 rounded-lg bg-indigo-800">
+              <span className="flex p-2 rounded-lg bg-blue-400">
                 <SpeakerphoneIcon className="h-6 w-6 text-white" aria-hidden="true" />
               </span>
               <p className="ml-3 font-medium text-white truncate">
@@ -32,7 +32,7 @@ const Banner = () => {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="-mr-1 flex p-2 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2"
+                className="-mr-1 flex p-2 rounded-md hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2"
               >
                 <span className="sr-only">Dismiss</span>
                 <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
