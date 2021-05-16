@@ -45,7 +45,7 @@ export default function Navbar() {
                   <Link to="/">
                     <h1 className="font-bold text-2xl text-black dark:text-white">ichi<span className="text-red-500">.</span></h1>
                   </Link>
-                  <button onClick={toggle} className="ml-10 flex p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2 text-black dark:text-white ">
+                  <button onClick={toggle} className="ml-2 sm:ml-10 flex p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2 text-black dark:text-white ">
                     {
                       !darkMode ?
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
