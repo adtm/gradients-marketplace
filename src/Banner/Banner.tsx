@@ -1,9 +1,9 @@
 import React, { useState, Fragment } from 'react'
 import { SpeakerphoneIcon, XIcon } from '@heroicons/react/outline'
-import { Transition } from '@headlessui/react';
+import { Transition } from '@headlessui/react'
 
 const Banner = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(true)
 
   return (
     <Transition
@@ -25,7 +25,9 @@ const Banner = () => {
               </span>
               <p className="ml-3 font-medium text-white truncate">
                 <span className="md:hidden">We announced a new product!</span>
-                <span className="hidden md:inline">Big news! We're excited to announce a brand NFT based on Harmony</span>
+                <span className="hidden md:inline">
+                  Big news! We're excited to announce a brand NFT based on Harmony
+                </span>
               </p>
             </div>
             <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
@@ -45,4 +47,4 @@ const Banner = () => {
   )
 }
 
-export default Banner;
+export default Banner

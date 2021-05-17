@@ -4,17 +4,15 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        'xs': { max: '320px' }
-      }
+        xs: { max: '320px' },
+      },
     },
   },
   variants: {
     extend: {
       ringWidth: ['hover', 'active'],
-      textOpacity: ['dark']
+      textOpacity: ['dark'],
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require('@tailwindcss/forms')],
 }

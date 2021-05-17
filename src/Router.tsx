@@ -1,15 +1,11 @@
-import React from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from "react-router-dom";
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import Home from "./Screens/Home";
-import Artist from "./Screens/Owner";
-import Navigation from "./Navbar/Navbar";
-import GradientScreen from "./Screens/Gradient";
-import Banner from "./Banner/Banner";
+import Home from './Screens/Home'
+import Artist from './Screens/Owner'
+import Navigation from './Navbar/Navbar'
+import GradientScreen from './Screens/Gradient'
+import Banner from './Banner/Banner'
 
 const Router = () => (
   <BrowserRouter>
@@ -23,12 +19,12 @@ const Router = () => (
         <Route path="/owner/:address">
           <Artist />
         </Route>
-        <Route path="/" >
+        <Route path="/">
           <Home />
         </Route>
       </Routes>
     </div>
   </BrowserRouter>
-);
+)
 
-export default Router;
+export default Router

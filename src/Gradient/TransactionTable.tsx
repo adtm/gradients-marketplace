@@ -1,19 +1,15 @@
-import React from 'react';
-import { shortenAddress } from '../utils/addressShortener';
-import { Link } from 'react-router-dom';
-import { Transaction } from '../types';
-
+import React from 'react'
+import { shortenAddress } from '../utils/addressShortener'
+import { Link } from 'react-router-dom'
+import { Transaction } from '../types'
 
 interface TransactionTableProps {
   transactions: Transaction[]
 }
 
 export default function TransactionTable({ transactions }: TransactionTableProps) {
-
   if (transactions.length === 0) {
-    return (
-      <p className="text-xs text-black dark:text-white">No transactions yet 🌻</p>
-    )
+    return <p className="text-xs text-black dark:text-white">No transactions yet 🌻</p>
   }
 
   return (
@@ -29,25 +25,25 @@ export default function TransactionTable({ transactions }: TransactionTableProps
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Date
-                    </th>
+                  </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Owner
-                    </th>
+                  </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Buyer
-                    </th>
+                  </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Price
-                    </th>
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -67,7 +63,9 @@ export default function TransactionTable({ transactions }: TransactionTableProps
                       </Link>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm">{Number(transaction.price).toLocaleString()} <span className="text-xs">ONE</span></div>
+                      <div className="text-sm">
+                        {Number(transaction.price).toLocaleString()} <span className="text-xs">ONE</span>
+                      </div>
                     </td>
                   </tr>
                 ))}

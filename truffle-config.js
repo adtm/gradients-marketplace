@@ -1,14 +1,14 @@
-const { TruffleProvider } = require("@harmony-js/core");
-const HDWalletProvider = require("truffle-hdwallet-provider");
+const { TruffleProvider } = require('@harmony-js/core')
+const HDWalletProvider = require('truffle-hdwallet-provider')
 
-const gasLimit = 3321900;
-const gasPrice = 1000000000;
+const gasLimit = 3321900
+const gasPrice = 1000000000
 
 module.exports = {
   networks: {
     local: {
-      network_id: "*",
-      host: "127.0.0.1",
+      network_id: '*',
+      host: '127.0.0.1',
       port: 7545,
     },
     ropsten: {
@@ -16,29 +16,29 @@ module.exports = {
       provider: () => {
         return new HDWalletProvider(process.ACCOUNT_MNEMORIC, process.ROPSTEN_URL)
       },
-      gas: 4000000
+      gas: 4000000,
     },
     testnet: {
-      network_id: "2",
+      network_id: '2',
       provider: () => {
         const truffleProvider = new TruffleProvider(
           process.TESTNET_URL,
           { memonic: process.ACCOUNT_MNEMORIC },
           { shardID: 0, chainId: 2 },
           { gasLimit, gasPrice }
-        );
-        const newAcc = truffleProvider.addByPrivateKey(process.ACCOUNT_PRIVATE_KEY);
-        truffleProvider.setSigner(newAcc);
+        )
+        const newAcc = truffleProvider.addByPrivateKey(process.ACCOUNT_PRIVATE_KEY)
+        truffleProvider.setSigner(newAcc)
 
-        return truffleProvider;
-      }
+        return truffleProvider
+      },
     },
   },
   compilers: {
     solc: {
-      version: "0.8.0",
+      version: '0.8.0',
       docker: false,
-      parser: "solcjs"
-    }
-  }
+      parser: 'solcjs',
+    },
+  },
 }

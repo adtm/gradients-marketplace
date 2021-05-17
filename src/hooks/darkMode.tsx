@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 
 const useDarkMode = () => {
-
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if (
+      localStorage.theme === 'dark' ||
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
       document.documentElement.classList.add('dark')
       setDarkMode(true)
     } else {
@@ -15,7 +17,6 @@ const useDarkMode = () => {
   }, [])
 
   const toggle = () => {
-
     if (localStorage.theme == 'dark') {
       localStorage.theme = 'light'
       document.documentElement.classList.remove('dark')
@@ -29,4 +30,4 @@ const useDarkMode = () => {
   return { darkMode, toggle }
 }
 
-export default useDarkMode;
+export default useDarkMode

@@ -44,6 +44,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
+    "format": "npx prettier --write .",
     "truffle:test": "truffle compile",
     "truffle:compile": "truffle compile",
     "server:dev": "netlify dev",
@@ -74,6 +75,7 @@
     "chai": "^4.3.4",
     "netlify-cli": "^3.29.14",
     "postcss": "^7.0.35",
+    "prettier": "2.3.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0",
     "truffle-assertions": "^0.9.2"
   }
