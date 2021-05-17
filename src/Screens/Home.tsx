@@ -6,11 +6,16 @@ import { Gradient } from '../types'
 import Loader from '../Loaders/Loader'
 import DisplayCard from '../Cards/DisplayCard'
 import { useEthereumProvider } from '../hooks/ethereum'
+import { getMessageFromCode } from 'eth-rpc-errors'
 
 const Home = () => {
   const navigate = useNavigate()
+
   const [gradients, setGradients] = useState<Gradient[]>([])
-  const [loading, setLoading] = useState(true)
+
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
+
   const {
     account,
     contracts: { tokenContract, marketplaceContract },
@@ -57,6 +62,11 @@ const Home = () => {
       }
 
       setGradients(fetchedGradients)
+    } catch (err) {
+      if (err.code != 4001) {
+        const message = getMessageFromCode(err.code)
+        setError(message)
+      }
     } finally {
       setLoading(false)
     }
@@ -69,6 +79,14 @@ const Home = () => {
 
   const renderNotConnectedMetamaskOrComponent = (component: React.ReactNode) => {
     if (loading) return <Loader />
+    if (error)
+      return (
+        <div className="text-center text-red-500">
+          <p className="text-lg font-medium italic pb-2">{error}</p>
+          <p className="text-sm italic">Please refresh page</p>
+          <p className="text-xs">If this continues, please contact us.</p>
+        </div>
+      )
     return component
   }
 

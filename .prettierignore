@@ -1,3 +1,5 @@
 build
 contracts
 .github
+package-lock.json
+package.json

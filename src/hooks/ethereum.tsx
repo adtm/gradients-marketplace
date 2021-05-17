@@ -34,6 +34,7 @@ const useEthereumProvider = () => {
   )
 
   const [error, setError] = useState<string | null>(null)
+  const [internalError, setInternalError] = useState<string | null>(null)
   const [account, setAccount] = useState<string | null>(null)
 
   useEffect(() => {
@@ -45,7 +46,7 @@ const useEthereumProvider = () => {
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
       _handleAccountsChanged(accounts)
     } catch (err) {
-      console.error(err)
+      setInternalError(err.message)
     }
   }
 
@@ -75,7 +76,7 @@ const useEthereumProvider = () => {
       ethereum.on('accountsChanged', _handleAccountsChanged)
       ethereum.on('chainChanged', _handleChainIdChanged)
     } catch (err) {
-      console.error(err)
+      setInternalError(err.message)
     }
   }
 
@@ -98,6 +99,7 @@ const useEthereumProvider = () => {
 
   return {
     error,
+    internalError,
     account,
     ethereum,
     web3,

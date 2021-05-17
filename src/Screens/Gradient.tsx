@@ -10,10 +10,14 @@ import { gradientBackground } from '../utils/gradientBackground'
 import { Transition } from '@headlessui/react'
 import BuyButton from '../Gradient/BuyButton'
 import DisabledBuyButton from '../Gradient/DisabledBuyButton'
+import { getMessageFromCode } from 'eth-rpc-errors'
 
 const GradientScreen = () => {
   const { id } = useParams()
   const [loading, setLoading] = useState<boolean>(true)
+  const [buyError, setBuyError] = useState<string | null>()
+  const [gradientError, setGradientError] = useState<string | null>()
+  const [transactionError, setTransactionError] = useState<string | null>()
   const [buyLoading, setBuyLoading] = useState<boolean>(false)
 
   // @ts-ignore
@@ -28,23 +32,37 @@ const GradientScreen = () => {
   } = useEthereumProvider()
 
   const getGradient = async () => {
-    const { left, right, owner } = await tokenContract.methods.getGradient(id).call()
-    const { price, forSale } = await marketplaceContract.methods.sellTransactionByTokenId(id).call()
+    try {
+      const { left, right, owner } = await tokenContract.methods.getGradient(id).call()
+      const { price, forSale } = await marketplaceContract.methods.sellTransactionByTokenId(id).call()
 
-    const gradient = { id, left, right, owner, price, forSale }
-    setGradient(gradient)
+      const gradient = { id, left, right, owner, price, forSale }
+      setGradient(gradient)
+    } catch (err) {
+      if (err.code != 4001) {
+        const message = getMessageFromCode(err.code)
+        setGradientError(message)
+      }
+    }
   }
 
   const getTransactions = async () => {
-    const length = await marketplaceContract.methods.getTransactionCount(new BN(id)).call()
+    try {
+      const length = await marketplaceContract.methods.getTransactionCount(new BN(id)).call()
 
-    const transactionsFetched = []
-    for (let i = 0; i < length; i++) {
-      const { buyer, owner, price, date } = await marketplaceContract.methods.getTransaction(new BN(id), i).call()
-      transactionsFetched.push({ buyer, owner, price, date })
+      const transactionsFetched = []
+      for (let i = 0; i < length; i++) {
+        const { buyer, owner, price, date } = await marketplaceContract.methods.getTransaction(new BN(id), i).call()
+        transactionsFetched.push({ buyer, owner, price, date })
+      }
+
+      setTransactions(transactionsFetched)
+    } catch (err) {
+      if (err.code != 4001) {
+        const message = getMessageFromCode(err.code)
+        setTransactionError(message)
+      }
     }
-
-    setTransactions(transactionsFetched)
   }
 
   const buyGradient = async () => {
@@ -56,7 +74,10 @@ const GradientScreen = () => {
         gas: 1000000,
       })
     } catch (err) {
-      console.error(err)
+      if (err.code != 4001) {
+        const message = getMessageFromCode(err.code)
+        setBuyError(message)
+      }
     } finally {
       setBuyLoading(false)
       getGradient()
@@ -64,9 +85,12 @@ const GradientScreen = () => {
   }
 
   useEffect(() => {
-    getGradient()
-    getTransactions()
-    setLoading(false)
+    try {
+      getGradient()
+      getTransactions()
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   return (
@@ -80,45 +104,68 @@ const GradientScreen = () => {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div className="md:flex mt-10 sm:mt-40 text-black dark:text-white">
-          <div className="flex flex-grow items-center justify-center">
-            <div style={gradientBg} className="w-96 h-96 rounded-md" />
-          </div>
-          <div className="md:flex-1">
-            <div className="pb-2 pt-5">
-              <h1 className="text-2xl sm:text-4xl font-bold">
-                {gradient.left} - {gradient.right}
-              </h1>
+        <div className="mt-10 sm:mt-40 ">
+          {gradientError ? (
+            <div className="mx-auto text-center text-red-500">
+              <p className="text-lg font-medium italic pb-2">{gradientError}</p>
+              <p className="text-sm italic">Please refresh page</p>
+              <p className="text-xs">If this continues, please contact us.</p>
             </div>
-            <div className="pb-3">
-              <div className="flex items-center">
-                <h3 className="font-semibold">
-                  of{' '}
-                  <Link className="text-blue-500" to={`/owner/${gradient.owner}`}>
-                    @{shortenAddress(gradient.owner)}
-                  </Link>
-                </h3>
+          ) : (
+            <div>
+              <div className="md:flex text-black dark:text-white">
+                <div className="flex flex-grow items-center justify-center">
+                  <div style={gradientBg} className="w-96 h-96 rounded-md" />
+                </div>
+                <div className="md:flex-1">
+                  <div className="pb-2 pt-5">
+                    <h1 className="text-2xl sm:text-4xl font-bold">
+                      {gradient.left} - {gradient.right}
+                    </h1>
+                  </div>
+                  <div className="pb-3">
+                    <div className="flex items-center">
+                      <h3 className="font-semibold">
+                        of{' '}
+                        <Link className="text-blue-500" to={`/owner/${gradient.owner}`}>
+                          @{shortenAddress(gradient.owner)}
+                        </Link>
+                      </h3>
+                    </div>
+                  </div>
+                  <div className="pt-8 md:text-left text-center">
+                    {gradient.forSale ? (
+                      <div>
+                        <BuyButton
+                          buyLoading={buyLoading}
+                          isOwner={gradient.owner.toLowerCase() === account?.toLowerCase()}
+                          price={Number(gradient.price)}
+                          buyGradient={buyGradient}
+                        />
+                        {buyError ? (
+                          <p className="text-lg font-medium text-red-500">{buyError} Check gas fees.</p>
+                        ) : null}
+                      </div>
+                    ) : (
+                      <DisabledBuyButton />
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-20 w-full md:w-2/3 lg:w-1/2 m-auto">
+                <p className="text-sm mb-5 text-black dark:text-white">Transactions</p>
+                <div>
+                  {transactionError ? (
+                    <div className="text-red-500 font-medium text-lg">
+                      <p>{transactionError}</p>
+                    </div>
+                  ) : (
+                    <TransactionTable transactions={transactions} />
+                  )}
+                </div>
               </div>
             </div>
-            <div className="pt-8 md:text-left text-center">
-              {gradient.forSale ? (
-                <BuyButton
-                  buyLoading={buyLoading}
-                  isOwner={gradient.owner.toLowerCase() === account?.toLowerCase()}
-                  price={Number(gradient.price)}
-                  buyGradient={buyGradient}
-                />
-              ) : (
-                <DisabledBuyButton />
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="mt-20 w-full md:w-2/3 lg:w-1/2 m-auto">
-          <p className="text-sm mb-5 text-black dark:text-white">Transactions</p>
-          <div>
-            <TransactionTable transactions={transactions} />
-          </div>
+          )}
         </div>
       </Transition>
     </div>

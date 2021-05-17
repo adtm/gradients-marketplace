@@ -11,6 +11,7 @@ import SettingsDropdown from './cards/SettingsDropdown'
 import SellModal from '../Gradient/ListingModal'
 import { gradientBackground } from '../utils/gradientBackground'
 import { useEthereumProvider } from '../hooks/ethereum'
+import { getMessageFromCode } from 'eth-rpc-errors'
 
 interface OwnerGradientCardProps {
   gradient: Gradient
@@ -19,6 +20,9 @@ interface OwnerGradientCardProps {
 
 const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
   const navigate = useNavigate()
+
+  const [cancelError, setCancelError] = useState<string | null>()
+  const [saleError, setSaleError] = useState<string | null>()
 
   const gradientBg = gradientBackground({ left: gradient.left, right: gradient.right })
   const {
@@ -41,6 +45,11 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         gas: 200000,
       })
       await getGradients()
+    } catch (err) {
+      if (err.code != 4001) {
+        const message = getMessageFromCode(err.code)
+        setSaleError(message)
+      }
     } finally {
       setSaleLoading(false)
     }
@@ -54,6 +63,11 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         gas: 200000,
       })
       await getGradients()
+    } catch (err) {
+      if (err.code != 4001) {
+        const message = getMessageFromCode(err.code)
+        setCancelError(message)
+      }
     } finally {
       setSaleLoading(false)
     }
@@ -96,6 +110,11 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         setOpen={setOpen}
         onClickSell={setForSale}
       />
+      {saleError || cancelError ? (
+        <div className="bg-red-500">
+          <p className="text-white px-2">{saleError || cancelError}</p>
+        </div>
+      ) : null}
       <div className="shadow-md rounded-t-none rounded-md dark:text-white text-black">
         <div className="px-4 py-4">
           <h3 className="text-md font-semibold pb-2 break-all">

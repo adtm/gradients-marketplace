@@ -7,7 +7,7 @@ import { shortenAddress } from '../utils/addressShortener'
 import useDarkMode from '../hooks/darkMode'
 
 const NetworkButton = () => {
-  const { error, account, openMetamask } = useEthereumProvider()
+  const { internalError, error, account, openMetamask } = useEthereumProvider()
 
   const buttonText = () => {
     if (error) return error
@@ -16,18 +16,26 @@ const NetworkButton = () => {
   }
 
   const buttonStyles = () => {
-    if (error) return 'dark:text-white bg-red-500 dark:bg-red-500 hover:bg-red-700'
+    if (error || internalError) return 'dark:text-white bg-red-500 dark:bg-red-500 hover:bg-red-700'
     if (account) return 'dark:text-white bg-green-500 dark:bg-green-500 hover:bg-green-700'
     return 'bg-black hover:bg-gray-700'
   }
 
   return (
-    <button
-      onClick={() => openMetamask()}
-      className={`bg-black dark:bg-white text-white dark:text-black w-full sm:w-auto py-3 px-6 font-semibold rounded-lg shadow-md ${buttonStyles()}`}
-    >
-      {buttonText()}
-    </button>
+    <div className="flex justify-items items-center">
+      {internalError ? (
+        <div className="text-sm text-right pr-4 text-red-500 font-medium">
+          <p>{internalError}</p>
+          <p>Please refresh page</p>
+        </div>
+      ) : null}
+      <button
+        onClick={() => openMetamask()}
+        className={`bg-black dark:bg-white text-white dark:text-black w-full sm:w-auto py-3 px-6 font-semibold rounded-lg shadow-md ${buttonStyles()}`}
+      >
+        {buttonText()}
+      </button>
+    </div>
   )
 }
 
