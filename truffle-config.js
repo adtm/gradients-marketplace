@@ -1,8 +1,9 @@
+require('dotenv').config()
 const { TruffleProvider } = require('@harmony-js/core')
 const HDWalletProvider = require('truffle-hdwallet-provider')
 
-const gasLimit = 3321900
-const gasPrice = 1000000000
+const gasLimit = 6721900
+const gasPrice = 10000000000
 
 module.exports = {
   networks: {
@@ -18,11 +19,11 @@ module.exports = {
       },
       gas: 4000000,
     },
-    testnet: {
+    harmony_testnet: {
       network_id: '2',
       provider: () => {
         const truffleProvider = new TruffleProvider(
-          process.TESTNET_URL,
+          process.HARMONY_TESTNET_URL,
           { memonic: process.ACCOUNT_MNEMORIC },
           { shardID: 0, chainId: 2 },
           { gasLimit, gasPrice }

@@ -25,6 +25,7 @@
     "@web3-react/types": "^6.0.7",
     "axios": "^0.21.1",
     "bn.js": "^5.2.0",
+    "dotenv": "^9.0.2",
     "eth-rpc-errors": "^4.0.3",
     "faker": "^5.5.3",
     "formik": "^2.2.6",

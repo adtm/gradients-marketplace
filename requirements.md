@@ -5,6 +5,6 @@ Existing bugs
 
 Features
 
-- [ ] Deploy on harmony testnet
+- [X] Deploy on harmony testnet
 - [ ] Check prices according to harmony and not eth
 - [ ] More wallet support, at-least one
