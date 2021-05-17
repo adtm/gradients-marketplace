@@ -17,7 +17,7 @@ export default function TransactionTable({ transactions }: TransactionTableProps
   }
 
   return (
-    <div className="flex flex-col text-black dark:text-white">
+    <div className="flex flex-col text-black">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -53,21 +53,21 @@ export default function TransactionTable({ transactions }: TransactionTableProps
               <tbody className="bg-white divide-y divide-gray-200">
                 {transactions.map((transaction) => (
                   <tr key={transaction.date}>
-                    <td className="px-6 py-4  ">
-                      <div className="text-sm ">{new Date(Number(transaction.date) * 1000).toLocaleDateString()}</div>
+                    <td className="px-6 py-4">
+                      <div className="text-sm">{new Date(Number(transaction.date) * 1000).toLocaleDateString()}</div>
                     </td>
                     <td className="px-6 py-4 font-medium">
                       <Link to={`/owner/${transaction.owner}`}>
                         <div className="text-sm hover:text-blue-500">@{shortenAddress(transaction.owner)}</div>
                       </Link>
                     </td>
-                    <td className="px-6 py-4  font-medium">
+                    <td className="px-6 py-4 font-medium">
                       <Link to={`/owner/${transaction.buyer}`}>
                         <div className="text-sm hover:text-blue-500">@{shortenAddress(transaction.buyer)}</div>
                       </Link>
                     </td>
-                    <td className="px-6 py-4  ">
-                      <div className="text-sm">{transaction.price} <span className="text-xs">ONE</span></div>
+                    <td className="px-6 py-4">
+                      <div className="text-sm">{Number(transaction.price).toLocaleString()} <span className="text-xs">ONE</span></div>
                     </td>
                   </tr>
                 ))}

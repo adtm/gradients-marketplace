@@ -16,13 +16,13 @@ const NetworkButton = () => {
   }
 
   const buttonStyles = () => {
-    if (error) return "text-white bg-red-500 hover:bg-red-700"
-    if (account) return "text-white bg-green-500 hover:bg-green-700"
-    return "text-white bg-black hover:bg-gray-700"
+    if (error) return "dark:text-white bg-red-500 dark:bg-red-500 hover:bg-red-700"
+    if (account) return "dark:text-white bg-green-500 dark:bg-green-500 hover:bg-green-700"
+    return "bg-black hover:bg-gray-700"
   }
 
   return (
-    <button onClick={() => openMetamask()} className={`w-full sm:w-auto py-3 px-6 font-semibold rounded-lg  shadow-md ${buttonStyles()}`}>
+    <button onClick={() => openMetamask()} className={`bg-black dark:bg-white text-white dark:text-black w-full sm:w-auto py-3 px-6 font-semibold rounded-lg shadow-md ${buttonStyles()}`}>
       {buttonText()}
     </button>
   )
@@ -41,7 +41,6 @@ export default function Navbar() {
               <MobileMenuButton open={open} />
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-
                   <Link to="/">
                     <h1 className="font-bold text-2xl text-black dark:text-white">ichi<span className="text-red-500">.</span></h1>
                   </Link>

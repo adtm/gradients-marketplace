@@ -106,7 +106,7 @@ const GradientScreen = () => {
           </div>
         </div>
         <div className="mt-20 w-full md:w-2/3 lg:w-1/2 m-auto">
-          <p className="text-sm mb-5">Transactions</p>
+          <p className="text-sm mb-5 text-black dark:text-white">Transactions</p>
           <div >
             <TransactionTable transactions={transactions} />
           </div>

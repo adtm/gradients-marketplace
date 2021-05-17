@@ -72,11 +72,11 @@ const Home = () => {
 
   return (
     <div className="container mx-auto">
-      <div className="text-center pb-10 mx-auto ">
-        <h1 className="tracking-tight font-extrabold text-gray-900 dark:text-white text-5xl md:text-6xl">
+      <div className="text-center py-5 sm:py-10 mx-auto ">
+        <h1 className="tracking-tight font-extrabold text-gray-900 dark:text-white text-4xl sm:text-5xl md:text-6xl">
           Gradients for the
         </h1>
-        <h1 className="text-3xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl w-2/3 md:w-1/3 p-2 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 mx-auto m-3">
+        <h1 className="text-3xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl w-2/3 md:w-1/3 p-1 sm:p-2 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 mx-auto m-3">
           inner artist
         </h1>
         <p className="text-xs italic text-black dark:text-white">on blockchain</p>
