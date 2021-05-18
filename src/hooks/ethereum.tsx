@@ -11,7 +11,7 @@ const TESTNET_CHAIN_ID = '1666600000'
 const LOCALHOST_CHAIN_ID = '1337'
 const ROPSTEN_CHAIN_ID = '3'
 
-const HARMONY_CHAIN_IDS = new Set([TESTNET_CHAIN_ID, MAIN_CHAIN_ID, LOCALHOST_CHAIN_ID, ROPSTEN_CHAIN_ID])
+const HARMONY_CHAIN_IDS = new Set([TESTNET_CHAIN_ID, MAIN_CHAIN_ID, LOCALHOST_CHAIN_ID])
 
 const useEthereumProvider = () => {
   const { ethereum } = window as any

@@ -80,7 +80,7 @@ const Home = () => {
     getGradients()
     return () => {
       setGradients([])
-      setLoading(true);
+      setLoading(true)
     }
   }, [])
 

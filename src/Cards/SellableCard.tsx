@@ -77,12 +77,12 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
 
   useEffect(() => {
     return () => {
-      setOpen(false);
-      setSaleError(null);
-      setCancelError(null);
-      setSaleLoading(true);
+      setOpen(false)
+      setSaleError(null)
+      setCancelError(null)
+      setSaleLoading(true)
     }
-  },[])
+  }, [])
 
   return (
     <div className="m-3 relative bg-white dark:bg-gray-800">

@@ -93,8 +93,8 @@ const GradientScreen = () => {
     }
     return () => {
       // @ts-ignore
-      setGradient({});
-      setTransactions([]);
+      setGradient({})
+      setTransactions([])
     }
   }, [])
 
