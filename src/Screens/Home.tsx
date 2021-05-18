@@ -67,6 +67,7 @@ const Home = () => {
         const message = getMessageFromCode(err.code)
         setError(message)
       }
+      console.error(err);
     } finally {
       setLoading(false)
     }

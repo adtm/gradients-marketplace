@@ -11,6 +11,7 @@ import { Transition } from '@headlessui/react'
 import BuyButton from '../Gradient/BuyButton'
 import DisabledBuyButton from '../Gradient/DisabledBuyButton'
 import { getMessageFromCode } from 'eth-rpc-errors'
+import { weiToOne } from '../utils/onePrice'
 
 const GradientScreen = () => {
   const { id } = useParams()
@@ -139,7 +140,7 @@ const GradientScreen = () => {
                         <BuyButton
                           buyLoading={buyLoading}
                           isOwner={gradient.owner.toLowerCase() === account?.toLowerCase()}
-                          price={Number(gradient.price)}
+                          price={weiToOne(Number(gradient.price))}
                           buyGradient={buyGradient}
                         />
                         {buyError ? (

@@ -12,6 +12,7 @@ import SellModal from '../Gradient/ListingModal'
 import { gradientBackground } from '../utils/gradientBackground'
 import { useEthereumProvider } from '../hooks/ethereum'
 import { getMessageFromCode } from 'eth-rpc-errors'
+import { oneToWei } from '../utils/onePrice'
 
 interface OwnerGradientCardProps {
   gradient: Gradient
@@ -40,7 +41,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
       await tokenContract.methods.approve(process.env.REACT_APP_GRADIENT_MARKETPLACE_ADDRESS, id).send({
         from: account,
       })
-      await marketplaceContract.methods.sellGradient(id, price).send({
+      await marketplaceContract.methods.sellGradient(id, String(oneToWei(Number(price)))).send({
         from: account,
         gas: 200000,
       })
@@ -68,6 +69,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         const message = getMessageFromCode(err.code)
         setCancelError(message)
       }
+      console.error(err);
     } finally {
       setSaleLoading(false)
     }
