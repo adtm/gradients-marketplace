@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { shortenAddress } from '../utils/addressShortener'
 
 import { Gradient } from '../types'
@@ -12,7 +12,7 @@ import SellModal from '../Gradient/ListingModal'
 import { gradientBackground } from '../utils/gradientBackground'
 import { useEthereumProvider } from '../hooks/ethereum'
 import { getMessageFromCode } from 'eth-rpc-errors'
-import { Units, fromWei, toWei, numToStr } from '@harmony-js/utils'
+import { Units, toWei, numToStr } from '@harmony-js/utils'
 
 interface OwnerGradientCardProps {
   gradient: Gradient
@@ -47,7 +47,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
       })
       await getGradients()
     } catch (err) {
-      if (err.code != 4001) {
+      if (err.code !== 4001) {
         const message = getMessageFromCode(err.code)
         setSaleError(message)
       }
@@ -65,7 +65,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
       })
       await getGradients()
     } catch (err) {
-      if (err.code != 4001) {
+      if (err.code !== 4001) {
         const message = getMessageFromCode(err.code)
         setCancelError(message)
       }
@@ -74,6 +74,15 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
       setSaleLoading(false)
     }
   }
+
+  useEffect(() => {
+    return () => {
+      setOpen(false);
+      setSaleError(null);
+      setCancelError(null);
+      setSaleLoading(true);
+    }
+  },[])
 
   return (
     <div className="m-3 relative bg-white dark:bg-gray-800">

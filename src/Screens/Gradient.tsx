@@ -39,7 +39,7 @@ const GradientScreen = () => {
       const gradient = { id, left, right, owner, price, forSale }
       setGradient(gradient)
     } catch (err) {
-      if (err.code != 4001) {
+      if (err.code !== 4001) {
         const message = getMessageFromCode(err.code)
         setGradientError(message)
       }
@@ -58,7 +58,7 @@ const GradientScreen = () => {
 
       setTransactions(transactionsFetched)
     } catch (err) {
-      if (err.code != 4001) {
+      if (err.code !== 4001) {
         const message = getMessageFromCode(err.code)
         setTransactionError(message)
       }
@@ -74,7 +74,7 @@ const GradientScreen = () => {
         gas: 1000000,
       })
     } catch (err) {
-      if (err.code != 4001) {
+      if (err.code !== 4001) {
         const message = getMessageFromCode(err.code)
         setBuyError(message)
       }
@@ -90,6 +90,11 @@ const GradientScreen = () => {
       getTransactions()
     } finally {
       setLoading(false)
+    }
+    return () => {
+      // @ts-ignore
+      setGradient({});
+      setTransactions([]);
     }
   }, [])
 

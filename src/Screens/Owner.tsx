@@ -51,6 +51,7 @@ const Owner = () => {
 
   useEffect(() => {
     getGradients()
+    return (() => setGradients([]))
   }, [])
 
   const renderLoaderOrComponent = (component: React.ReactNode) => {

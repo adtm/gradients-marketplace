@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Transition } from '@headlessui/react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { Gradient } from '../types'
 import Loader from '../Loaders/Loader'
@@ -65,7 +65,7 @@ const Home = () => {
 
       setGradients(fetchedGradients)
     } catch (err) {
-      if (err.code != 4001) {
+      if (err.code !== 4001) {
         const message = getMessageFromCode(err.code)
         setError(message)
       }
@@ -78,6 +78,10 @@ const Home = () => {
   useEffect(() => {
     // mintTokens()
     getGradients()
+    return () => {
+      setGradients([])
+      setLoading(true);
+    }
   }, [])
 
   const renderNotConnectedMetamaskOrComponent = (component: React.ReactNode) => {
