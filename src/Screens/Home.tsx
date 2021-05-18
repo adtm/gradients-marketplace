@@ -7,6 +7,7 @@ import Loader from '../Loaders/Loader'
 import DisplayCard from '../Cards/DisplayCard'
 import { useEthereumProvider } from '../hooks/ethereum'
 import { getMessageFromCode } from 'eth-rpc-errors'
+import * as Sentry from "@sentry/react";
 
 const Home = () => {
   const navigate = useNavigate()
@@ -69,7 +70,7 @@ const Home = () => {
         const message = getMessageFromCode(err.code)
         setError(message)
       }
-      console.error(err)
+      Sentry.captureException(err);
     } finally {
       setLoading(false)
     }

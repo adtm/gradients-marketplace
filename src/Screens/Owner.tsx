@@ -8,6 +8,7 @@ import DisplayCard from '../Cards/DisplayCard'
 import { useEthereumProvider } from '../hooks/ethereum'
 import { shortenAddress } from '../utils/addressShortener'
 import Loader from '../Loaders/Loader'
+import * as Sentry from "@sentry/react";
 
 const Owner = () => {
   const { address } = useParams()
@@ -43,7 +44,7 @@ const Owner = () => {
 
       setGradients(fetchedGradients)
     } catch (err) {
-      console.error(err)
+      Sentry.captureException(err);
     } finally {
       setLoading(false)
     }

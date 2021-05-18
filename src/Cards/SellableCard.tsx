@@ -13,7 +13,7 @@ import { gradientBackground } from '../utils/gradientBackground'
 import { useEthereumProvider } from '../hooks/ethereum'
 import { getMessageFromCode } from 'eth-rpc-errors'
 import { Units, toWei, numToStr } from '@harmony-js/utils'
-
+import * as Sentry from "@sentry/react";
 interface OwnerGradientCardProps {
   gradient: Gradient
   getGradients: () => void
@@ -51,6 +51,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         const message = getMessageFromCode(err.code)
         setSaleError(message)
       }
+      Sentry.captureException(err);
     } finally {
       setSaleLoading(false)
     }
@@ -69,7 +70,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         const message = getMessageFromCode(err.code)
         setCancelError(message)
       }
-      console.error(err)
+      Sentry.captureException(err);
     } finally {
       setSaleLoading(false)
     }
