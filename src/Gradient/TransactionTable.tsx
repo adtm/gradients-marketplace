@@ -2,7 +2,7 @@ import React from 'react'
 import { shortenAddress } from '../utils/addressShortener'
 import { Link } from 'react-router-dom'
 import { Transaction } from '../types'
-import { weiToOne } from '../utils/onePrice'
+import { fromWei, Units } from '@harmony-js/utils'
 
 interface TransactionTableProps {
   transactions: Transaction[]
@@ -65,7 +65,8 @@ export default function TransactionTable({ transactions }: TransactionTableProps
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm">
-                        {weiToOne(Number(transaction.price)).toLocaleString()} <span className="text-xs">ONE</span>
+                        {Number(fromWei(transaction.price, Units.one)).toLocaleString('en')}{' '}
+                        <span className="text-xs">ONE</span>
                       </div>
                     </td>
                   </tr>

@@ -12,7 +12,6 @@
   npx truffle deploy --network ropsten
 ```
 
-
 ### harmony testnet
 
 ```

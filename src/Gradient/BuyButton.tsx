@@ -1,10 +1,11 @@
 import React from 'react'
 import { useEthereumProvider } from '../hooks/ethereum'
+import { fromWei, Units } from '@harmony-js/utils'
 
 interface BuyButtonProps {
   isOwner: boolean
   buyLoading: boolean
-  price: number
+  price: string
   buyGradient: () => Promise<void>
 }
 
@@ -32,7 +33,7 @@ const BuyButton = ({ isOwner, buyLoading, price, buyGradient }: BuyButtonProps) 
   return (
     <div>
       <h3 className="text-3xl font-semibold py-1">
-        {Number(price).toLocaleString()} <span className="text-sm">ONE</span>
+        {Number(fromWei(price, Units.one)).toLocaleString('en')} <span className="text-sm">ONE</span>
       </h3>
       {!account ? (
         <NotConnectedButton />

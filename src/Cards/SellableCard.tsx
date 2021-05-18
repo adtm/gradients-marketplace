@@ -12,7 +12,7 @@ import SellModal from '../Gradient/ListingModal'
 import { gradientBackground } from '../utils/gradientBackground'
 import { useEthereumProvider } from '../hooks/ethereum'
 import { getMessageFromCode } from 'eth-rpc-errors'
-import { oneToWei } from '../utils/onePrice'
+import { Units, fromWei, toWei, numToStr } from '@harmony-js/utils'
 
 interface OwnerGradientCardProps {
   gradient: Gradient
@@ -41,7 +41,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
       await tokenContract.methods.approve(process.env.REACT_APP_GRADIENT_MARKETPLACE_ADDRESS, id).send({
         from: account,
       })
-      await marketplaceContract.methods.sellGradient(id, String(oneToWei(Number(price)))).send({
+      await marketplaceContract.methods.sellGradient(id, numToStr(toWei(price, Units.one))).send({
         from: account,
         gas: 200000,
       })
@@ -69,7 +69,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         const message = getMessageFromCode(err.code)
         setCancelError(message)
       }
-      console.error(err);
+      console.error(err)
     } finally {
       setSaleLoading(false)
     }
@@ -78,6 +78,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
   return (
     <div className="m-3 relative bg-white dark:bg-gray-800">
       <div style={gradientBg} className="rounded-md rounded-b-none xs:w-72 w-80 sm:w-72 h-80">
+        <p className="absolute text-xs p-2 italic font-medium dark:text-black text-white"># {gradient.id}</p>
         {saleLoading ? (
           <div className="rounded-md rounded-b-none xs:w-72 w-80 sm:w-72 h-80 bg-gray-300 bg-opacity-80 flex justify-center items-center">
             <svg
@@ -129,11 +130,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
             </button>
           </h4>
         </div>
-        {gradient.forSale ? (
-          <SaleButton price={Number(gradient.price)} />
-        ) : (
-          <BackgroundTip gradientBackground={gradientBg} />
-        )}
+        {gradient.forSale ? <SaleButton price={gradient.price} /> : <BackgroundTip gradientBackground={gradientBg} />}
       </div>
     </div>
   )

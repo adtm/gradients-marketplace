@@ -13,6 +13,7 @@ const Home = () => {
 
   const [gradients, setGradients] = useState<Gradient[]>([])
 
+  const [supply, setSupply] = useState(0)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -51,6 +52,7 @@ const Home = () => {
   const getGradients = async () => {
     try {
       const totalSupply = await tokenContract.methods.totalSupply().call()
+      setSupply(totalSupply)
 
       const fetchedGradients = []
       for (let id = 0; id < totalSupply; id++) {
@@ -67,7 +69,7 @@ const Home = () => {
         const message = getMessageFromCode(err.code)
         setError(message)
       }
-      console.error(err);
+      console.error(err)
     } finally {
       setLoading(false)
     }
@@ -101,6 +103,7 @@ const Home = () => {
           inner artist
         </h1>
         <p className="text-xs italic text-black dark:text-white">on blockchain</p>
+        <span className="text-xs italic text-black dark:text-white">{supply}/100</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="animate-bounce mx-auto mt-7 text-black dark:text-white h-6 w-6"

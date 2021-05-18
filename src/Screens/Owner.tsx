@@ -75,10 +75,12 @@ const Owner = () => {
   }
 
   const renderedCards = () => {
-    if (isOwner)
+    if (isOwner) {
       return gradients.map((gradient) => (
         <SellableCard key={gradient.id} gradient={gradient} getGradients={getGradients} />
       ))
+    }
+
     return gradients.map((gradient) => (
       <Link key={gradient.id} to={`/gradient/${gradient.id}`}>
         <DisplayCard gradient={gradient} />
