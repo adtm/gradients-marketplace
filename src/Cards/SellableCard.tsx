@@ -51,6 +51,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         const message = getMessageFromCode(err.code)
         setSaleError(message)
       }
+      console.error(err);
       Sentry.captureException(err);
     } finally {
       setSaleLoading(false)
@@ -70,6 +71,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         const message = getMessageFromCode(err.code)
         setCancelError(message)
       }
+      console.error(err);
       Sentry.captureException(err);
     } finally {
       setSaleLoading(false)

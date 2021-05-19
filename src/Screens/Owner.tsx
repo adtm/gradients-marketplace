@@ -44,6 +44,7 @@ const Owner = () => {
 
       setGradients(fetchedGradients)
     } catch (err) {
+      console.error(err);
       Sentry.captureException(err);
     } finally {
       setLoading(false)

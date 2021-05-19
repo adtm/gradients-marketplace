@@ -70,6 +70,7 @@ const Home = () => {
         const message = getMessageFromCode(err.code)
         setError(message)
       }
+      console.error(err);
       Sentry.captureException(err);
     } finally {
       setLoading(false)

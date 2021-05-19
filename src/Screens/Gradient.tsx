@@ -44,6 +44,7 @@ const GradientScreen = () => {
         const message = getMessageFromCode(err.code)
         setGradientError(message)
       }
+      console.error(err);
       Sentry.captureException(err);
     }
   }
@@ -64,6 +65,7 @@ const GradientScreen = () => {
         const message = getMessageFromCode(err.code)
         setTransactionError(message)
       }
+      console.error(err);
       Sentry.captureException(err);
     }
   }
@@ -81,6 +83,7 @@ const GradientScreen = () => {
         const message = getMessageFromCode(err.code)
         setBuyError(message)
       }
+      console.error(err);
       Sentry.captureException(err);
     } finally {
       setBuyLoading(false)
