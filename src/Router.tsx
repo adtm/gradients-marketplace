@@ -7,6 +7,7 @@ import Navigation from './Navbar/Navbar'
 import GradientScreen from './Screens/Gradient'
 import Banner from './Banner/Banner'
 import Footer from './Footer/Footer'
+import About from './Screens/About'
 
 const Router = () => (
   <BrowserRouter>
@@ -19,6 +20,9 @@ const Router = () => (
         </Route>
         <Route path="/owner/:address">
           <Artist />
+        </Route>
+        <Route path="/about">
+          <About />
         </Route>
         <Route path="/">
           <Home />
