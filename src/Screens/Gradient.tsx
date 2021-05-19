@@ -11,7 +11,7 @@ import { Transition } from '@headlessui/react'
 import BuyButton from '../Gradient/BuyButton'
 import DisabledBuyButton from '../Gradient/DisabledBuyButton'
 import { getMessageFromCode } from 'eth-rpc-errors'
-import * as Sentry from "@sentry/react";
+import { logError } from '../utils/logger'
 
 const GradientScreen = () => {
   const { id } = useParams()
@@ -44,8 +44,7 @@ const GradientScreen = () => {
         const message = getMessageFromCode(err.code)
         setGradientError(message)
       }
-      console.error(err);
-      Sentry.captureException(err);
+      logError(err)
     }
   }
 
@@ -65,8 +64,7 @@ const GradientScreen = () => {
         const message = getMessageFromCode(err.code)
         setTransactionError(message)
       }
-      console.error(err);
-      Sentry.captureException(err);
+      logError(err)
     }
   }
 
@@ -83,8 +81,7 @@ const GradientScreen = () => {
         const message = getMessageFromCode(err.code)
         setBuyError(message)
       }
-      console.error(err);
-      Sentry.captureException(err);
+      logError(err)
     } finally {
       setBuyLoading(false)
       getGradient()
@@ -103,7 +100,7 @@ const GradientScreen = () => {
       setGradient({})
       setTransactions([])
     }
-  }, [])
+  }, [account])
 
   return (
     <div>

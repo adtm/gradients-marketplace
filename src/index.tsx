@@ -5,15 +5,14 @@ import reportWebVitals from './reportWebVitals'
 import Router from './Router'
 import { Web3ReactProvider } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
-
+import * as Sentry from '@sentry/react'
+import { Integrations } from '@sentry/tracing'
 
 Sentry.init({
-  dsn: "https://c88f2f4ac8a1437ca9d39d6c082dbc6d@o686068.ingest.sentry.io/5772723",
+  dsn: 'https://c88f2f4ac8a1437ca9d39d6c082dbc6d@o686068.ingest.sentry.io/5772723',
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
-});
+})
 
 // @ts-ignore
 function getLibrary(provider) {

@@ -46,7 +46,7 @@ const useEthereumProvider = () => {
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
       _handleAccountsChanged(accounts)
     } catch (err) {
-      console.error(err);
+      console.error(err)
       setInternalError(err.message)
     }
   }
@@ -77,7 +77,7 @@ const useEthereumProvider = () => {
       ethereum.on('accountsChanged', _handleAccountsChanged)
       ethereum.on('chainChanged', _handleChainIdChanged)
     } catch (err) {
-      console.error(err);
+      console.error(err)
       setInternalError(err.message)
     }
   }

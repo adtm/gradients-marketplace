@@ -13,7 +13,8 @@ import { gradientBackground } from '../utils/gradientBackground'
 import { useEthereumProvider } from '../hooks/ethereum'
 import { getMessageFromCode } from 'eth-rpc-errors'
 import { Units, toWei, numToStr } from '@harmony-js/utils'
-import * as Sentry from "@sentry/react";
+import { logError } from '../utils/logger'
+
 interface OwnerGradientCardProps {
   gradient: Gradient
   getGradients: () => void
@@ -51,8 +52,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         const message = getMessageFromCode(err.code)
         setSaleError(message)
       }
-      console.error(err);
-      Sentry.captureException(err);
+      logError(err)
     } finally {
       setSaleLoading(false)
     }
@@ -71,8 +71,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         const message = getMessageFromCode(err.code)
         setCancelError(message)
       }
-      console.error(err);
-      Sentry.captureException(err);
+      logError(err)
     } finally {
       setSaleLoading(false)
     }
@@ -109,14 +108,21 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
           </div>
         ) : null}
       </div>
-      <div className="absolute top-0 right-0 m-2 space-x-2">
-        <SettingsDropdown
-          onSale={gradient.forSale}
-          id={gradient.id}
-          onCancelSale={cancelSale}
-          onSetSale={() => setOpen(true)}
-        />
-        <PreviewButton id={gradient.id} />
+      <div className="absolute top-0 right-0 m-2">
+        <div className="space-x-2">
+          <SettingsDropdown
+            onSale={gradient.forSale}
+            id={gradient.id}
+            onCancelSale={cancelSale}
+            onSetSale={() => setOpen(true)}
+          />
+          <PreviewButton id={gradient.id} />
+        </div>
+        {saleError || cancelError ? (
+          <div className="bg-red-500 p-2 m-2 rounded-md">
+            <p className="text-white">{saleError || cancelError}</p>
+          </div>
+        ) : null}
       </div>
       <SellModal
         id={gradient.id}
@@ -125,11 +131,6 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         setOpen={setOpen}
         onClickSell={setForSale}
       />
-      {saleError || cancelError ? (
-        <div className="bg-red-500">
-          <p className="text-white px-2">{saleError || cancelError}</p>
-        </div>
-      ) : null}
       <div className="shadow-md rounded-t-none rounded-md dark:text-white text-black">
         <div className="px-4 py-4">
           <h3 className="text-md font-semibold pb-2 break-all">

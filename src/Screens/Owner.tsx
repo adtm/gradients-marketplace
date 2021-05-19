@@ -8,7 +8,7 @@ import DisplayCard from '../Cards/DisplayCard'
 import { useEthereumProvider } from '../hooks/ethereum'
 import { shortenAddress } from '../utils/addressShortener'
 import Loader from '../Loaders/Loader'
-import * as Sentry from "@sentry/react";
+import { logError } from '../utils/logger'
 
 const Owner = () => {
   const { address } = useParams()
@@ -44,8 +44,7 @@ const Owner = () => {
 
       setGradients(fetchedGradients)
     } catch (err) {
-      console.error(err);
-      Sentry.captureException(err);
+      logError(err)
     } finally {
       setLoading(false)
     }
@@ -54,7 +53,7 @@ const Owner = () => {
   useEffect(() => {
     getGradients()
     return () => setGradients([])
-  }, [])
+  }, [address, account])
 
   const renderLoaderOrComponent = (component: React.ReactNode) => {
     if (loading) return <Loader />
