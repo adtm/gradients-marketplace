@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import mixpanel from 'mixpanel-browser'
 
 const useDarkMode = () => {
   const [darkMode, setDarkMode] = useState(false)
@@ -25,6 +26,7 @@ const useDarkMode = () => {
       document.documentElement.classList.add('dark')
     }
     setDarkMode(localStorage.theme === 'dark')
+    mixpanel.track('dark-toggle', { to: localStorage.theme })
   }
 
   return { darkMode, toggle }

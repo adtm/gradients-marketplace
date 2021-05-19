@@ -2,6 +2,7 @@ import { getWeb3 } from './web3'
 import { AbiItem } from 'web3-utils'
 import { useState, useEffect } from 'react'
 import detectEthereumProvider from '@metamask/detect-provider'
+import mixpanel from 'mixpanel-browser'
 
 import GradientTokenAbi from '../abi/GradientToken.json'
 import GradientMarketplaceAbi from '../abi/GradientMarketplace.json'
@@ -95,6 +96,7 @@ const useEthereumProvider = () => {
     if (accounts.length === 0) {
       setAccount(null)
     } else if (accounts[0] !== account) {
+      mixpanel.identify(accounts[0])
       setAccount(accounts[0])
     }
   }

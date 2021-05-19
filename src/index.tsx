@@ -6,6 +6,7 @@ import Router from './Router'
 import { Web3ReactProvider } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import * as Sentry from '@sentry/react'
+import mixpanel from 'mixpanel-browser'
 import { Integrations } from '@sentry/tracing'
 
 Sentry.init({
@@ -13,6 +14,8 @@ Sentry.init({
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
 })
+
+mixpanel.init('5f3dee850e508c576154823ea51afadd', { api_host: 'https://api-eu.mixpanel.com' }, '')
 
 // @ts-ignore
 function getLibrary(provider) {

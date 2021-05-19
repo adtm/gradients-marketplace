@@ -59,7 +59,7 @@ export default function Navbar() {
                   </Link>
                   <button
                     onClick={toggle}
-                    className="ml-2 sm:ml-10 flex p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2 text-black dark:text-white "
+                    className="ml-2 sm:ml-5 flex p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2 text-black dark:text-white"
                   >
                     {!darkMode ? (
                       <svg

@@ -5,7 +5,7 @@ import { Gradient } from '../types'
 import SaleButton from './cards/SaleButton'
 import BackgroundTip from './cards/BackgroundTip'
 import { gradientBackground } from '../utils/gradientBackground'
-
+import mixpanel from 'mixpanel-browser'
 interface CardProps {
   gradient: Gradient
 }
@@ -30,6 +30,7 @@ const DisplayCard = ({ gradient }: CardProps) => {
               className="hover:text-blue-500"
               onClick={(event) => {
                 event.stopPropagation()
+                mixpanel.track('display-to-owner', { owner: gradient.owner })
                 navigate(`/owner/${gradient.owner}`)
               }}
             >

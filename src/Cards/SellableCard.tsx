@@ -14,6 +14,7 @@ import { useEthereumProvider } from '../hooks/ethereum'
 import { getMessageFromCode } from 'eth-rpc-errors'
 import { Units, toWei, numToStr } from '@harmony-js/utils'
 import { logError } from '../utils/logger'
+import mixpanel from 'mixpanel-browser'
 
 interface OwnerGradientCardProps {
   gradient: Gradient
@@ -47,6 +48,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         gas: 200000,
       })
       await getGradients()
+      mixpanel.track('sellable-put-for-sale', { id, owner: account, price })
     } catch (err) {
       if (err.code !== 4001) {
         const message = getMessageFromCode(err.code)
@@ -54,6 +56,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
       }
       logError(err)
     } finally {
+      mixpanel.track('sellable-clicked-sell', { id, owner: account, price })
       setSaleLoading(false)
     }
   }
@@ -66,6 +69,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
         gas: 200000,
       })
       await getGradients()
+      mixpanel.track('sellable-cancelled', { id, owner: account })
     } catch (err) {
       if (err.code !== 4001) {
         const message = getMessageFromCode(err.code)
@@ -73,6 +77,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
       }
       logError(err)
     } finally {
+      mixpanel.track('sellable-click-cancel', { id, owner: account })
       setSaleLoading(false)
     }
   }
@@ -138,7 +143,14 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
           </h3>
           <h4 className="text-xs ">
             of{' '}
-            <button className="hover:text-blue-500" onClick={() => navigate(`/owner/${gradient.owner}`)}>
+            <button
+              className="hover:text-blue-500"
+              onClick={(event) => {
+                event.stopPropagation()
+                mixpanel.track('sellable-to-owner', { owner: gradient.owner })
+                navigate(`/owner/${gradient.owner}`)
+              }}
+            >
               @{shortenAddress(gradient.owner)}
             </button>
           </h4>

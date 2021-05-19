@@ -6,6 +6,7 @@ import Artist from './Screens/Owner'
 import Navigation from './Navbar/Navbar'
 import GradientScreen from './Screens/Gradient'
 import Banner from './Banner/Banner'
+import Footer from './Footer/Footer'
 
 const Router = () => (
   <BrowserRouter>
@@ -24,6 +25,7 @@ const Router = () => (
         </Route>
       </Routes>
     </div>
+    <Footer />
   </BrowserRouter>
 )
 

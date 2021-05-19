@@ -12,6 +12,7 @@ import BuyButton from '../Gradient/BuyButton'
 import DisabledBuyButton from '../Gradient/DisabledBuyButton'
 import { getMessageFromCode } from 'eth-rpc-errors'
 import { logError } from '../utils/logger'
+import mixpanel from 'mixpanel-browser'
 
 const GradientScreen = () => {
   const { id } = useParams()
@@ -45,6 +46,8 @@ const GradientScreen = () => {
         setGradientError(message)
       }
       logError(err)
+    } finally {
+      mixpanel.track('gradient-get', { id, owner: account })
     }
   }
 
@@ -76,6 +79,7 @@ const GradientScreen = () => {
         value: new BN(gradient.price),
         gas: 1000000,
       })
+      mixpanel.track('gradient-bought', { id, owner: account })
     } catch (err) {
       if (err.code !== 4001) {
         const message = getMessageFromCode(err.code)
@@ -83,6 +87,7 @@ const GradientScreen = () => {
       }
       logError(err)
     } finally {
+      mixpanel.track('gradient-clicked-buy', { id, owner: account })
       setBuyLoading(false)
       getGradient()
     }

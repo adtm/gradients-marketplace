@@ -8,6 +8,7 @@ import DisplayCard from '../Cards/DisplayCard'
 import { useEthereumProvider } from '../hooks/ethereum'
 import { getMessageFromCode } from 'eth-rpc-errors'
 import { logError } from '../utils/logger'
+import mixpanel from 'mixpanel-browser'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -132,7 +133,14 @@ const Home = () => {
         >
           <div className="flex flex-wrap flex-auto justify-center">
             {gradients.map((gradient) => (
-              <a className="cursor-pointer" key={gradient.id} onClick={() => navigate(`/gradient/${gradient.id}`)}>
+              <a
+                className="cursor-pointer"
+                key={gradient.id}
+                onClick={() => {
+                  mixpanel.track('home-to-card', { id: gradient.id, owner: account })
+                  navigate(`/gradient/${gradient.id}`)
+                }}
+              >
                 <DisplayCard gradient={gradient} />
               </a>
             ))}

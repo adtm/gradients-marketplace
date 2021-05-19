@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { Transition } from '@headlessui/react'
 
 import { Gradient } from '../types'
@@ -9,9 +9,11 @@ import { useEthereumProvider } from '../hooks/ethereum'
 import { shortenAddress } from '../utils/addressShortener'
 import Loader from '../Loaders/Loader'
 import { logError } from '../utils/logger'
+import mixpanel from 'mixpanel-browser'
 
 const Owner = () => {
   const { address } = useParams()
+  const navigate = useNavigate()
 
   const {
     web3,
@@ -64,7 +66,12 @@ const Owner = () => {
     return (
       <div className="m-5 text-center">
         <p className="dark:text-white text-black ">No gradients yet 🖼</p>
-        <Link to="/">
+        <Link
+          to="/"
+          onClick={() => {
+            mixpanel.track('owner-to-home')
+          }}
+        >
           <button
             type="button"
             className="m-4 px-5 py-3 border rounded-md shadow-sm text-sm font-medium text-white dark:text-black bg-black dark:bg-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -84,9 +91,16 @@ const Owner = () => {
     }
 
     return gradients.map((gradient) => (
-      <Link key={gradient.id} to={`/gradient/${gradient.id}`}>
+      <a
+        className="cursor-pointer"
+        key={gradient.id}
+        onClick={() => {
+          mixpanel.track('owner-to-card', { owner: gradient.owner, id: gradient.id })
+          navigate(`/gradient/${gradient.id}`)
+        }}
+      >
         <DisplayCard gradient={gradient} />
-      </Link>
+      </a>
     ))
   }
 
