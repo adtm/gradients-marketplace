@@ -7,12 +7,17 @@ import mixpanel from 'mixpanel-browser'
 import GradientTokenAbi from '../abi/GradientToken.json'
 import GradientMarketplaceAbi from '../abi/GradientMarketplace.json'
 
-const MAIN_CHAIN_ID = '1666700000'
-const TESTNET_CHAIN_ID = '1666600000'
+const MAIN_CHAIN_ID = '1666600000'
+const TESTNET_CHAIN_ID = '1666700000'
 const LOCALHOST_CHAIN_ID = '1337'
 const ROPSTEN_CHAIN_ID = '3'
 
-const HARMONY_CHAIN_IDS = new Set([TESTNET_CHAIN_ID, MAIN_CHAIN_ID, LOCALHOST_CHAIN_ID])
+export const HARMONY_CHAIN_IDS = new Set([
+  // MAIN_CHAIN_ID,
+  // ROPSTEN_CHAIN_ID,
+  TESTNET_CHAIN_ID,
+  LOCALHOST_CHAIN_ID,
+])
 
 const useEthereumProvider = () => {
   const { ethereum } = window as any
@@ -36,6 +41,7 @@ const useEthereumProvider = () => {
 
   const [error, setError] = useState<string | null>(null)
   const [internalError, setInternalError] = useState<string | null>(null)
+  const [chainId, setChainId] = useState<string | null>()
   const [account, setAccount] = useState<string | null>(null)
 
   useEffect(() => {
@@ -85,6 +91,7 @@ const useEthereumProvider = () => {
 
   const _handleChainIdChanged = (chainId: string) => {
     const chainIdInDec = BigInt(chainId).toString(10)
+    console.log(chainIdInDec)
     if (!HARMONY_CHAIN_IDS.has(chainIdInDec)) {
       setError('Wrong network')
     } else {
@@ -107,6 +114,7 @@ const useEthereumProvider = () => {
     account,
     ethereum,
     web3,
+    chainId,
     contracts: {
       tokenContract,
       marketplaceContract,
