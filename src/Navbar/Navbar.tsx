@@ -100,7 +100,9 @@ export default function Navbar() {
                       <Link to={`/owner/${account}`} className="p-0 m-0 h-10 w-10 ">
                         <div
                           className={`inline-block h-10 w-10 rounded-full ring-offset-2 hover:ring-2 ring-green-300`}
-                          style={{ background: `linear-gradient(135deg, #17EAD9 0%, #6078EA 100%)` }}
+                          style={{
+                            background: `linear-gradient(135deg, #17EAD9 0%, #6078EA 100%)`,
+                          }}
                         />
                       </Link>
                     ) : null}
