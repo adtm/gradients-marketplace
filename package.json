@@ -50,7 +50,7 @@
     "build": "craco build",
     "test": "craco test",
     "format": "npx prettier --write .",
-    "truffle:test": "truffle compile",
+    "truffle:test": "truffle test",
     "truffle:compile": "truffle compile",
     "server:dev": "netlify dev",
     "eject": "react-scripts eject"
