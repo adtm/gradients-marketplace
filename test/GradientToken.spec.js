@@ -2,7 +2,6 @@ const GradientToken = artifacts.require('GradientToken')
 const { BN, expectEvent, expectRevert } = require('@openzeppelin/test-helpers')
 const faker = require('faker')
 
-// @NOTE: make a test and fix duplicate gradient minting
 contract('Gradient token', (accounts) => {
   let leftColor
   let rightColor
@@ -24,10 +23,10 @@ contract('Gradient token', (accounts) => {
     it('should allow to mint tokens', async () => {
       const transaction = await tokenInstance.createGradient(leftColor, rightColor)
       expectEvent(transaction, 'CreatedGradient', {
-        tokenId: new BN(1),
+        tokenId: new BN(0),
       })
 
-      const gradientByTokenId = await tokenInstance.getGradient(1)
+      const gradientByTokenId = await tokenInstance.getGradient(0)
       assert.deepEqual(gradientByTokenId.left, leftColor)
       assert.deepEqual(gradientByTokenId.right, rightColor)
     })
@@ -53,12 +52,4 @@ contract('Gradient token', (accounts) => {
     })
   })
 
-  describe('getAllGradients', () => {
-    it('should return all gradients', async () => {
-      await tokenInstance.createGradient(leftColor, rightColor)
-
-      const result = await tokenInstance.getAllGradients()
-      assert.deepEqual(result.length, 3)
-    })
-  })
 })

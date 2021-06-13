@@ -1,16 +1,14 @@
 const GradientMarketplace = artifacts.require('GradientMarketplace')
 const GradientToken = artifacts.require('GradientToken')
-const { BN, expectEvent, expectRevert } = require('@openzeppelin/test-helpers')
 
-// @NOTE: cleanups
-// @NOTE: random values
+const { BN, expectRevert } = require('@openzeppelin/test-helpers')
+
 const faker = require('faker')
 
 contract('Gradient marketplace', (accounts) => {
   let tokenInstance
   let markeplaceInstance
 
-  const tokenId = new BN(1)
   const price = new BN(20)
 
   let leftColor
@@ -30,13 +28,15 @@ contract('Gradient marketplace', (accounts) => {
   })
 
   describe('sellGradient', () => {
-    it('should put a gradient for sale by owner', async () => {
+    it('should put a gradient for sale by contract owner', async () => {
+      const tokenId = new BN(0)
+
       await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] })
       await markeplaceInstance.sellGradient(tokenId, price, {
         from: accounts[0],
       })
 
-      const result = await markeplaceInstance.sellTransactionByTokenId.call(1)
+      const result = await markeplaceInstance.sellTransactionByTokenId.call(0)
       assert.deepEqual(result[0].toString(), tokenId.toString())
       assert.deepEqual(result[1].toString(), accounts[0].toString())
       assert.deepEqual(result[2], true)
@@ -44,10 +44,11 @@ contract('Gradient marketplace', (accounts) => {
     })
 
     it("shouldn't allow to sell gradient to not an owner", async () => {
+      const tokenId = new BN(1)
       await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] })
 
       await expectRevert(
-        markeplaceInstance.sellGradient(new BN(2), new BN(20), {
+        markeplaceInstance.sellGradient(tokenId, price, {
           from: accounts[1],
         }),
         "Gradient doesn't belong to you"
@@ -55,10 +56,11 @@ contract('Gradient marketplace', (accounts) => {
     })
 
     it("shouldn't allow to sell gradient for 0 price", async () => {
+      const tokenId = new BN(2)
       await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] })
 
       await expectRevert(
-        markeplaceInstance.sellGradient(new BN(3), new BN(0), {
+        markeplaceInstance.sellGradient(tokenId, new BN(0), {
           from: accounts[0],
         }),
         'Sell price cannot be negative or zero'
@@ -67,17 +69,19 @@ contract('Gradient marketplace', (accounts) => {
   })
 
   describe('cancelSellGradient', () => {
-    it("shouldn't allow to cancel a gradient sale to not an owner", async () => {
+
+    it("shouldn allow to cancel a gradient sale for owner", async () => {
+      const tokenId = new BN(3)
       await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] })
-      await markeplaceInstance.sellGradient(new BN(4), price, {
+      await markeplaceInstance.sellGradient(tokenId, price, {
         from: accounts[0],
       })
 
-      await markeplaceInstance.cancelSellGradient(new BN(4), {
+      await markeplaceInstance.cancelSellGradient(tokenId, {
         from: accounts[0],
       })
 
-      const result = await markeplaceInstance.sellTransactionByTokenId.call(4)
+      const result = await markeplaceInstance.sellTransactionByTokenId.call(3)
       assert.deepEqual(result[0].toString(), '0')
       assert.deepEqual(result[1].toString(), '0x0000000000000000000000000000000000000000')
       assert.deepEqual(result[2], false)
@@ -85,13 +89,14 @@ contract('Gradient marketplace', (accounts) => {
     })
 
     it("shouldn't allow to cancel a gradient sale to not an owner", async () => {
+      const tokenId = new BN(4)
       await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] })
-      await markeplaceInstance.sellGradient(new BN(5), price, {
+      await markeplaceInstance.sellGradient(tokenId, price, {
         from: accounts[0],
       })
 
       await expectRevert(
-        markeplaceInstance.cancelSellGradient(new BN(5), {
+        markeplaceInstance.cancelSellGradient(tokenId, {
           from: accounts[1],
         }),
         "Gradient doesn't belong to you"
@@ -101,10 +106,11 @@ contract('Gradient marketplace', (accounts) => {
 
   describe('buyGradient', () => {
     it("shouldn't allow to buy a gradient, which is not for sale", async () => {
+      const tokenId = new BN(5)
       await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] })
 
       await expectRevert(
-        markeplaceInstance.buyGradient(new BN(6), {
+        markeplaceInstance.buyGradient(tokenId, {
           from: accounts[1],
         }),
         'Gradient is not for sale'
@@ -112,13 +118,14 @@ contract('Gradient marketplace', (accounts) => {
     })
 
     it("shouldn't allow to buy an own gradient for the owner", async () => {
+      const tokenId = new BN(6)
       await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] })
-      await markeplaceInstance.sellGradient(new BN(7), price, {
+      await markeplaceInstance.sellGradient(tokenId, price, {
         from: accounts[0],
       })
 
       await expectRevert(
-        markeplaceInstance.buyGradient(new BN(7), {
+        markeplaceInstance.buyGradient(tokenId, {
           from: accounts[0],
         }),
         "Gradient can't be bought by owner"
@@ -126,35 +133,37 @@ contract('Gradient marketplace', (accounts) => {
     })
 
     it('should fail if sent transaction value is lower than gradient price', async () => {
+      const tokenId = new BN(7)
       await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] })
-      await markeplaceInstance.sellGradient(new BN(8), price, {
+      await markeplaceInstance.sellGradient(tokenId, price, {
         from: accounts[0],
       })
 
       await expectRevert(
-        markeplaceInstance.buyGradient(new BN(8), {
+        markeplaceInstance.buyGradient(tokenId, {
           from: accounts[1],
-          value: 1,
+          value: new BN(1),
         }),
         'Gradient price is higher than sent amount'
       )
     })
 
     it('should buy a gradient when the seller approves it', async () => {
+      const tokenId = new BN(8)
       await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] })
-      await markeplaceInstance.sellGradient(new BN(9), price, {
+      await markeplaceInstance.sellGradient(tokenId, price, {
         from: accounts[0],
       })
-      const tokenOwner = await tokenInstance.ownerOf(new BN(9))
+      const tokenOwner = await tokenInstance.ownerOf(tokenId)
       assert.deepEqual(tokenOwner, accounts[0])
 
-      await tokenInstance.approve(markeplaceInstance.address, new BN(9), { from: accounts[0] })
-      await markeplaceInstance.buyGradient(new BN(9), {
+      await tokenInstance.approve(markeplaceInstance.address, tokenId, { from: accounts[0] })
+      await markeplaceInstance.buyGradient(tokenId, {
         from: accounts[1],
         value: 200,
       })
 
-      const transferredOwner = await tokenInstance.ownerOf(new BN(9))
+      const transferredOwner = await tokenInstance.ownerOf(tokenId)
       assert.deepEqual(transferredOwner, accounts[1])
     })
   })
