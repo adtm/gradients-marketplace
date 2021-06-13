@@ -51,5 +51,4 @@ contract('Gradient token', (accounts) => {
       )
     })
   })
-
 })

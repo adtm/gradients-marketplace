@@ -62,7 +62,11 @@ const GradientScreen = () => {
         transactionsFetched.push({ buyer, owner, price, date })
       }
 
-      setTransactions(transactionsFetched)
+      if (transactionsFetched.length > 0) {
+        setTransactions(transactionsFetched.sort((f,s) => s.date - f.date))
+      } else {
+        setTransactions(transactionsFetched)
+      }
     } catch (err) {
       if (err.code !== 4001) {
         const message = getMessageFromCode(err.code)
@@ -90,7 +94,7 @@ const GradientScreen = () => {
     } finally {
       mixpanel.track('gradient-clicked-buy', { id, owner: account })
       setBuyLoading(false)
-      getGradient()
+      Promise.all([getGradient(), getTransactions()])
     }
   }
 
@@ -170,7 +174,9 @@ const GradientScreen = () => {
                         ) : null}
                       </div>
                     ) : (
-                      <DisabledBuyButton />
+                      <DisabledBuyButton
+                        isOwner={gradient.owner ? gradient.owner.toLowerCase() === account?.toLowerCase() : false}
+                      />
                     )}
                   </div>
                 </div>

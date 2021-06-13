@@ -69,8 +69,7 @@ contract('Gradient marketplace', (accounts) => {
   })
 
   describe('cancelSellGradient', () => {
-
-    it("shouldn allow to cancel a gradient sale for owner", async () => {
+    it('shouldn allow to cancel a gradient sale for owner', async () => {
       const tokenId = new BN(3)
       await tokenInstance.createGradient(leftColor, rightColor, { from: accounts[0] })
       await markeplaceInstance.sellGradient(tokenId, price, {

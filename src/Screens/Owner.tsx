@@ -44,7 +44,11 @@ const Owner = () => {
         }
       }
 
-      setGradients(fetchedGradients)
+      if (fetchedGradients.length > 0) {
+        setGradients(fetchedGradients.sort((f,s) => f.id - s.id))
+      } else {
+        setGradients(fetchedGradients)
+      }
     } catch (err) {
       logError(err)
     } finally {
