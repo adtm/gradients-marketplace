@@ -13,7 +13,7 @@ contract GradientToken is ERC721, ERC721Enumerable, Ownable, GradientDomain {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
-  uint256 public MAX_SUPPLY = 100;
+  uint256 public MAX_SUPPLY = 50;
   mapping (bytes32 => bool) usedGradients;
   mapping (uint256 => Gradient) gradientById;
 

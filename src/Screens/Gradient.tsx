@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { shortenAddress } from '../utils/addressShortener'
 import { Link, useParams } from 'react-router-dom'
+import Loader from '../Loaders/Loader'
 
 import BN from 'bn.js'
 import { useEthereumProvider } from '../hooks/ethereum'
@@ -17,9 +18,9 @@ import mixpanel from 'mixpanel-browser'
 const GradientScreen = () => {
   const { id } = useParams()
   const [loading, setLoading] = useState<boolean>(true)
-  const [buyError, setBuyError] = useState<string | null>()
-  const [gradientError, setGradientError] = useState<string | null>()
-  const [transactionError, setTransactionError] = useState<string | null>()
+  const [buyError, setBuyError] = useState<string | null>(null)
+  const [gradientError, setGradientError] = useState<string | null>(null)
+  const [transactionError, setTransactionError] = useState<string | null>(null)
   const [buyLoading, setBuyLoading] = useState<boolean>(false)
 
   // @ts-ignore
@@ -94,12 +95,15 @@ const GradientScreen = () => {
   }
 
   useEffect(() => {
-    try {
-      getGradient()
-      getTransactions()
-    } finally {
-      setLoading(false)
+    async function load() {
+      try {
+        await Promise.all([getGradient(), getTransactions()])
+      } finally {
+        setLoading(false)
+      }
     }
+
+    load()
     return () => {
       // @ts-ignore
       setGradient({})
@@ -109,12 +113,13 @@ const GradientScreen = () => {
 
   return (
     <div>
+      {loading ? <Loader /> : null}
       <Transition
         show={!loading}
-        enter="transition-opacity duration-300"
+        enter="transition-opacity duration-1000"
         enterFrom="opacity-0"
         enterTo="opacity-100"
-        leave="transition-opacity duration-300"
+        leave="transition-opacity duration-1000"
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >

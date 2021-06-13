@@ -15,7 +15,6 @@ const Home = () => {
 
   const [gradients, setGradients] = useState<Gradient[]>([])
 
-  const [supply, setSupply] = useState(0)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -26,22 +25,115 @@ const Home = () => {
 
   // @NOTE: only for development purposes
   const mintTokens = async () => {
-    const gradients = [
-      { left: '#FCE38A', right: '#F38181' },
-      { left: '#F54EA2', right: '#FF7676' },
-      { left: '#17EAD9', right: '#6078EA' },
-      { left: '#622774', right: '#C53364' },
-      { left: '#7117EA', right: '#EA6060' },
-      { left: '#42E695', right: '#3BB2B8' },
-      { left: '#F02FC2', right: '#6094EA' },
-      { left: '#65799B', right: '#5E2563' },
-      { left: '#184E68', right: '#57CA85' },
-      { left: '#58247A', right: '#1BCEDF' },
+    const rights = [
+      '#F38181',
+      '#FF7676',
+      '#6078EA',
+      '#C53364',
+      '#EA6060',
+      '#3BB2B8',
+      '#6094EA',
+      '#5E2563',
+      '#57CA85',
+      '#1BCEDF',
+      '#F76B11',
+      '#DDD6F2',
+      '#FFBBE3',
+      '#2AF594',
+      '#FF2525',
+      '#FF0006',
+      '#FC00FA',
+      '#ff9063',
+      '#00b3c4',
+      '#6699fB',
+      '#ff6b0C',
+      '#b2ffd2',
+      '#D7FFFE',
+      '#fef9d7',
+      '#66a6ff',
+      '#f6f3ff',
+      '#99c99c',
+      '#d09693',
+      '#fe5196',
+      '#04befe',
+      '#c7eafd',
+      '#fdd6bd',
+      '#f9f047',
+      '#68e0cf',
+      '#7579ff',
+      '#F9FEA5',
+      '#FBD786',
+      '#b91d73',
+      '#2C5364',
+      '#FFF200',
+      '#0083B0',
+      '#ef8e38',
+      '#99f2c8',
+      '#fbc2eb',
+      '#e6dee9',
+      '#e2ebf0',
+      '#f5576c',
+      '#00f2fe',
+      '#330867',
+      '#e7f0fd',
     ]
 
-    for (let i = 0; i < gradients.length; i++) {
+    const lefts = [
+      '#FCE38A',
+      '#F54EA2',
+      '#17EAD9',
+      '#622774',
+      '#7117EA',
+      '#42E695',
+      '#F02FC2',
+      '#65799B',
+      '#184E68',
+      '#58247A',
+      '#FAD961',
+      '#FAACA8',
+      '#A9C9FF',
+      '#08AEEA',
+      '#FFE53B',
+      '#6284FF',
+      '#00DBDE',
+      '#f85032',
+      '#d6ff7f',
+      '#000066',
+      '#e233ff',
+      '#2f80ed',
+      '#FFFEFF',
+      '#d299c2',
+      '#89f7fe',
+      '#cd9cf2',
+      '#dcb0ed',
+      '#c71d6f',
+      '#f77062',
+      '#4481eb',
+      '#e8198b',
+      '#f794a4',
+      '#0fd850',
+      '#209cff',
+      '#b224ef',
+      '#20E2D7',
+      '#C6FFDD',
+      '#f953c6',
+      '#0F2027',
+      '#1E9600',
+      '#00B4DB',
+      '#108dc7',
+      '#1f4037',
+      '#a18cd1',
+      '#fdcbf1',
+      '#cfd9df',
+      '#f093fb',
+      '#4facfe',
+      '#30cfd0',
+      '#accbee',
+    ]
+
+    for (let i = 0; i < 50; i++) {
       try {
-        await tokenContract.methods.createGradient(gradients[i].left, gradients[i].right).send({
+        await tokenContract.methods.createGradient(lefts[i], rights[i]).send({
           from: account,
           gas: 1000000,
         })
@@ -54,7 +146,6 @@ const Home = () => {
   const getGradients = async () => {
     try {
       const totalSupply = await tokenContract.methods.totalSupply().call()
-      setSupply(totalSupply)
 
       const fetchedGradients = []
       for (let id = 0; id < totalSupply; id++) {
@@ -87,7 +178,7 @@ const Home = () => {
   }, [])
 
   const renderNotConnectedMetamaskOrComponent = (component: React.ReactNode) => {
-    if (loading) return <Loader />
+    if (loading) return component
     if (error)
       return (
         <div className="text-center text-red-500">
@@ -109,7 +200,6 @@ const Home = () => {
           inner artist
         </h1>
         <p className="text-xs italic text-black dark:text-white">on blockchain</p>
-        <span className="text-xs italic text-black dark:text-white">{supply}/100</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="animate-bounce mx-auto mt-7 text-black dark:text-white h-6 w-6"
@@ -122,30 +212,33 @@ const Home = () => {
       </div>
 
       {renderNotConnectedMetamaskOrComponent(
-        <Transition
-          show={!loading}
-          enter="transition-opacity duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="transition-opacity duration-300"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="flex flex-wrap flex-auto justify-center">
-            {gradients.map((gradient) => (
-              <a
-                className="cursor-pointer"
-                key={gradient.id}
-                onClick={() => {
-                  mixpanel.track('home-to-card', { id: gradient.id, owner: account })
-                  navigate(`/gradient/${gradient.id}`)
-                }}
-              >
-                <DisplayCard gradient={gradient} />
-              </a>
-            ))}
-          </div>
-        </Transition>
+        <>
+          {loading ? <Loader /> : null}
+          <Transition
+            show={!loading}
+            enter="delay-500 transition-opacity ease-linear duration-1000"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity ease-linear duration-1000"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="flex flex-wrap flex-auto justify-center">
+              {gradients.map((gradient) => (
+                <a
+                  className="cursor-pointer"
+                  key={gradient.id}
+                  onClick={() => {
+                    mixpanel.track('home-to-card', { id: gradient.id, owner: account })
+                    navigate(`/gradient/${gradient.id}`)
+                  }}
+                >
+                  <DisplayCard gradient={gradient} />
+                </a>
+              ))}
+            </div>
+          </Transition>
+        </>
       )}
     </div>
   )

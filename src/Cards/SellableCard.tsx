@@ -139,7 +139,7 @@ const SellableCard = ({ gradient, getGradients }: OwnerGradientCardProps) => {
       <div className="shadow-md rounded-t-none rounded-md dark:text-white text-black">
         <div className="px-4 py-4">
           <h3 className="text-md font-semibold pb-2 break-all">
-            {gradient.left} - {gradient.right}
+            {gradient.left.toUpperCase()} - {gradient.right.toUpperCase()}
           </h3>
           <h4 className="text-xs ">
             of{' '}

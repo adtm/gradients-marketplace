@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Loader = () => (
   <div className="text-center text-sm text-black dark:text-white">
     <div

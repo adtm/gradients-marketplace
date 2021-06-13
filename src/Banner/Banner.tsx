@@ -1,13 +1,18 @@
-import React, { useState, Fragment } from 'react'
+import { useState, Fragment } from 'react'
 import { SpeakerphoneIcon, XIcon } from '@heroicons/react/outline'
 import { Transition } from '@headlessui/react'
 
 const Banner = () => {
-  const [open, setOpen] = useState(true)
+  const [closed, setClosed] = useState(Boolean(localStorage.getItem('banner-close')))
+
+  const closeBanner = () => {
+    localStorage.setItem('banner-close', 'true')
+    setClosed(true)
+  }
 
   return (
     <Transition
-      show={open}
+      show={!closed}
       as={Fragment}
       enter="transition ease-out duration-100"
       enterFrom="transform opacity-0"
@@ -33,7 +38,7 @@ const Banner = () => {
             <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={closeBanner}
                 className="-mr-1 flex p-2 rounded-md hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2"
               >
                 <span className="sr-only">Dismiss</span>

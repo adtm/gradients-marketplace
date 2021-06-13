@@ -16,5 +16,5 @@
 
 ```
   # faucet https://faucet.pops.one/
-  npx truffle deploy --network harmony_testnet --Skip-Dry-Run --reset
+  npx truffle deploy --network harmony_testnet --skip-dry-run --reset
 ```

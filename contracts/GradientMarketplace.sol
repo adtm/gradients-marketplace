@@ -28,7 +28,7 @@ contract GradientMarketplace is GradientDomain {
   mapping (uint256 => Transaction[]) public transactionsByTokenId;
 
   constructor(address tokenAddress) {
-    gradientToken = GradientToken(tokenAddress); 
+    gradientToken = GradientToken(tokenAddress);
   }
 
   modifier onlyGradientOwner(uint256 tokenId) {
