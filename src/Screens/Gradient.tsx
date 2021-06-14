@@ -24,10 +24,8 @@ const GradientScreen = () => {
   const [buyLoading, setBuyLoading] = useState<boolean>(false)
 
   // @ts-ignore
-  const [gradient, setGradient] = useState<Gradient>({})
+  const [gradient, setGradient] = useState<Gradient | null>(null)
   const [transactions, setTransactions] = useState<Transaction[]>([])
-
-  const gradientBg = gradientBackground({ left: gradient.left, right: gradient.right })
 
   const {
     account,
@@ -63,7 +61,7 @@ const GradientScreen = () => {
       }
 
       if (transactionsFetched.length > 0) {
-        setTransactions(transactionsFetched.sort((f,s) => s.date - f.date))
+        setTransactions(transactionsFetched.sort((f, s) => s.date - f.date))
       } else {
         setTransactions(transactionsFetched)
       }
@@ -76,12 +74,12 @@ const GradientScreen = () => {
     }
   }
 
-  const buyGradient = async () => {
+  const buyGradient = async (price: string) => {
     try {
       setBuyLoading(true)
       await marketplaceContract.methods.buyGradient(id).send({
         from: account,
-        value: new BN(gradient.price),
+        value: new BN(price),
         gas: 1000000,
       })
       mixpanel.track('gradient-bought', { id, owner: account })
@@ -136,51 +134,57 @@ const GradientScreen = () => {
             </div>
           ) : (
             <div>
-              <div className="md:flex text-black dark:text-white">
-                <div className="flex flex-grow items-center justify-center">
-                  <div style={gradientBg} className="w-96 h-96 rounded-md relative">
-                    <p className="absolute text-xs p-2 italic font-medium dark:text-black text-white">
-                      # {gradient.id}
-                    </p>
-                  </div>
-                </div>
-                <div className="md:flex-1">
-                  <div className="pb-2 pt-5">
-                    <h1 className="text-2xl sm:text-4xl font-bold">
-                      {gradient.left} - {gradient.right}
-                    </h1>
-                  </div>
-                  <div className="pb-3">
-                    <div className="flex items-center">
-                      <h3 className="font-semibold">
-                        of{' '}
-                        <Link className="text-blue-500" to={`/owner/${gradient.owner}`}>
-                          @{shortenAddress(gradient.owner)}
-                        </Link>
-                      </h3>
+              {gradient ? (
+                <div className="md:flex text-black dark:text-white">
+                  <div className="flex flex-grow items-center justify-center">
+                    <div
+                      style={gradientBackground({ left: gradient.left, right: gradient.right })}
+                      className="w-96 h-96 rounded-md relative"
+                    >
+                      <p className="absolute text-xs p-2 italic font-medium dark:text-black text-white">
+                        # {gradient.id}
+                      </p>
                     </div>
                   </div>
-                  <div className="pt-8 md:text-left text-center">
-                    {gradient.forSale ? (
-                      <div>
-                        <BuyButton
-                          buyLoading={buyLoading}
-                          isOwner={gradient.owner.toLowerCase() === account?.toLowerCase()}
-                          price={gradient.price}
-                          buyGradient={buyGradient}
-                        />
-                        {buyError ? (
-                          <p className="text-lg font-medium text-red-500">{buyError} Check gas fees.</p>
-                        ) : null}
+                  <div className="md:flex-1">
+                    <div className="pb-2 pt-5">
+                      <h1 className="text-2xl sm:text-4xl font-bold">
+                        {gradient.left} - {gradient.right}
+                      </h1>
+                    </div>
+                    <div className="pb-3">
+                      <div className="flex items-center">
+                        <h3 className="font-semibold">
+                          of{' '}
+                          <Link className="text-blue-500" to={`/owner/${gradient.owner}`}>
+                            @{shortenAddress(gradient.owner)}
+                          </Link>
+                        </h3>
                       </div>
-                    ) : (
-                      <DisabledBuyButton
-                        isOwner={gradient.owner ? gradient.owner.toLowerCase() === account?.toLowerCase() : false}
-                      />
-                    )}
+                    </div>
+                    <div className="pt-8 md:text-left text-center">
+                      {gradient.forSale ? (
+                        <div>
+                          <BuyButton
+                            buyLoading={buyLoading}
+                            isOwner={gradient.owner.toLowerCase() === account?.toLowerCase()}
+                            price={gradient.price}
+                            buyGradient={() => buyGradient(gradient.price)}
+                          />
+                          {buyError ? (
+                            <p className="text-lg font-medium text-red-500">{buyError} Check gas fees.</p>
+                          ) : null}
+                        </div>
+                      ) : (
+                        <DisabledBuyButton
+                          isOwner={gradient.owner ? gradient.owner.toLowerCase() === account?.toLowerCase() : false}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : null}
+
               <div className="mt-20 w-full md:w-2/3 lg:w-1/2 m-auto">
                 <p className="text-sm mb-5 text-black dark:text-white">Transactions</p>
                 <div>

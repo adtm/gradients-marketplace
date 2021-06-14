@@ -9,6 +9,7 @@ import { useEthereumProvider } from '../hooks/ethereum'
 import { getMessageFromCode } from 'eth-rpc-errors'
 import { logError } from '../utils/logger'
 import mixpanel from 'mixpanel-browser'
+import Advertisement from '../Banner/Advertisement'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -200,6 +201,7 @@ const Home = () => {
           inner artist
         </h1>
         <p className="text-xs italic text-black dark:text-white">on blockchain</p>
+        <Advertisement />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="animate-bounce mx-auto mt-7 text-black dark:text-white h-6 w-6"

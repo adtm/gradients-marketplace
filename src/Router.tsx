@@ -52,7 +52,7 @@ const Router = () => {
     <BrowserRouter>
       <Banner />
       <Navigation />
-      <div className="md:mx-10 md:my-10 sm:mx-10 sm:my-10 my-5 mx-5">{renderNetworkCheck()}</div>
+      <div className="m-5 md:m-10">{renderNetworkCheck()}</div>
       <Footer />
     </BrowserRouter>
   )
