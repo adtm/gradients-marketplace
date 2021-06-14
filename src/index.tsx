@@ -8,6 +8,9 @@ import { Web3Provider } from '@ethersproject/providers'
 import * as Sentry from '@sentry/react'
 import mixpanel from 'mixpanel-browser'
 import { Integrations } from '@sentry/tracing'
+import ReactGA from 'react-ga';
+
+ReactGA.initialize('UA-199450921-1');
 
 Sentry.init({
   dsn: 'https://c88f2f4ac8a1437ca9d39d6c082dbc6d@o686068.ingest.sentry.io/5772723',
