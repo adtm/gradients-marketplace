@@ -1,9 +1,9 @@
 const Advertisement = () => (
-  <div className="w-6/12 m-auto text-sm ">
+  <div className="lg:w-6/12 m-auto text-xs md:text-sm text-left">
     <a
       href="https://www.wren.co"
       target="blank"
-      className="mt-5 text-white bg-green-600 p-5 rounded-lg flex hover:bg-green-700"
+      className="mt-5 text-white bg-green-600 p-4 rounded-lg flex hover:bg-green-700"
     >
       <svg className="w-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 108.57">
         <path
